@@ -94,11 +94,11 @@
 
     <div class="modal-body p-0">
           <div class="col text-center p-0" style="background-color: black;">
-            <img id="imagen-modal" src="http://localhost:3000/{{imagePut}}" 
+            <img id="imagen-modal" src="https://una-mejor-manera.herokuapp.com/{{imagePut}}" 
                  class="modal-image-responsive-vertical"
                  *ngIf="getHeightImagePost(idPut) > getWidthImagePost(idPut)" >
 
-             <img id="imagen-modal" src="http://localhost:3000/{{imagePut}}" 
+             <img id="imagen-modal" src="https://una-mejor-manera.herokuapp.com/{{imagePut}}" 
                  class="modal-image-responsive-horizontal"
                  *ngIf="getHeightImagePost(idPut) < getWidthImagePost(idPut)" >
           </div>
@@ -122,7 +122,7 @@
 
           <div style="overflow: hidden;width: 50px;height: 50px;border-radius: 50%;">
             <a class="text-decoration-none" [routerLink]="['/home/profile', publicacion.idUser]" >
-                <img src="http://localhost:3000/{{publicacion.avatar}}" width="50" height="auto" style="border-radius: 100px; margin-right: 10px;"> 
+                <img src="https://una-mejor-manera.herokuapp.com/{{publicacion.avatar}}" width="50" height="auto" style="border-radius: 100px; margin-right: 10px;"> 
             </a>
           </div>
           
@@ -134,7 +134,7 @@
   			  <br *ngIf="publicacion.imagen !== ''">
           <div>
             <a (click)='openImage(imageContent, publicacion._id, publicacion.imagen, publicacion.descripcion)' class="text-decoration-none" *ngIf="publicacion.imagen !== ''">
-              <img src="http://localhost:3000/{{publicacion.imagen}}" *ngIf="publicacion.imagen !== ''" class="imagen-post rounded" id="imagen-post-{{publicacion._id}}"> 
+              <img src="https://una-mejor-manera.herokuapp.com/{{publicacion.imagen}}" *ngIf="publicacion.imagen !== ''" class="imagen-post rounded" id="imagen-post-{{publicacion._id}}"> 
             </a>
 
              <p class="py-3">{{publicacion.descripcion}}</p>

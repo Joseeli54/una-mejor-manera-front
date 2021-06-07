@@ -64,7 +64,7 @@ export class PostComponent implements OnInit {
 	  this.descriptionPut = description;
 
 	  if(imagen !== undefined && imagen !== ''){
-	  	this.urlPreview = "http://localhost:3000/"+imagen;
+	  	this.urlPreview = "https://una-mejor-manera.herokuapp.com/"+imagen;
 	  }
 
 	  this.modalReference = this.modalService.open(content, { size: 'lg', centered: true});
