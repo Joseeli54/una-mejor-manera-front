@@ -1,0 +1,36 @@
+<!-- login.component.html -->
+
+<div class="login">
+  <form class="custom-form" method="post">
+
+    <div class="text-center">
+      <img src="assets/img/una-mejor-manera-color.png" width="100" height="140">
+    </div>
+   <!--  <h1>Login</h1> -->
+    <input
+      type="email"
+      name="idUser"
+      [(ngModel)]="idUser"
+      placeholder="Nombre de usuario o Correo electronico"
+      required="required"
+    />
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="password"
+      placeholder="Contraseña"
+      required="required"
+    />
+    <button type="submit" (click)="login()">Iniciar Sesión</button>
+
+    <div class="text-center mt-3">
+        <a routerLink="/forgotPassword" style="color: #650077;"> ¿Olvido su contraseña? </a>
+    </div>
+
+    <div class="text-center mt-1" style="color: #000102bf;">
+        ¿No tienes una cuenta? <a href="#" routerLink="/register" style="color: #650077;">Registrate.</a>
+    </div>
+
+  </form>
+</div>
+

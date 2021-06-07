@@ -1,0 +1,121 @@
+<!-- register.component.html -->
+
+<div  class="register">
+  <form *ngIf="!bSend" class="custom-form" method="post">
+<!--     <h1>Register</h1> -->
+  
+  <div class="mb-3">
+  	<a routerLink="/login"  class="mr-3">
+      <li class="fa fa-arrow-left fa-2x" style="color: #000102bf;"></li>
+    </a>
+    <b style=" font-size: 1.8rem;color: #000102bf;"> 
+      Registrarse
+    </b>
+  </div>
+
+  <div>
+      <input
+        type="text"
+        [(ngModel)]="nombre"
+        name="nombre"
+        placeholder="Nombre*"
+        required="required"
+      />
+  </div>
+
+  <div>
+      <input
+        type="text"
+        [(ngModel)]="apellido"
+        name="apellido"
+        placeholder="Apellido*"
+        required="required"
+      />
+  </div>
+
+  <div>
+    <input
+      type="text"
+      [(ngModel)]="username"
+      name="username"
+      placeholder="Nombre de Usuario*"
+      required="required"
+    />
+  </div>
+
+  <div>
+    <input
+      type="email"
+      [(ngModel)]="email"
+      name="email"
+      placeholder="Correo Electronico*"
+      required="required"
+    />
+  </div>
+  <div>
+    <input
+      type="number"
+      [(ngModel)]="telefono"
+      name="telefono"
+      placeholder="Numero de Telefono*"
+      required="required"
+    />
+  </div>
+  <div>
+    <input
+      type="text"
+      [(ngModel)]="puesto"
+      name="puesto"
+      placeholder="Puesto u ocupación que desempeña en la organización*"
+      required="required"
+    />
+  </div>
+  <div>
+      <span style="color: #000102bf;" class="ml-1"> 
+          <b>Contraseña <strong style="color:red">*</strong></b>
+      </span>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        placeholder="Introduzca Contraseña"
+        required="required"
+      />
+      <input
+        type="password"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        placeholder="Repetir Contraseña"
+        required="required"
+      />
+  </div>
+    <div>
+
+    <div *ngIf="this.urlPreview !== ''" class="position-relative">
+      <a class="fa fa-times bg-danger text-white position-absolute p-1 text-decoration-none" 
+      (click)="clickEliminarImagen()"></a>
+      <img [src]="urlPreview" width="150" height="auto" > 
+      <br>
+    </div>
+
+    <input
+      type="file"
+      (change)="capturarImagen($event)"
+      [(ngModel)]="avatar"
+      name="avatar"
+      id="avatar"
+      placeholder="Ingrese su foto de perfil*"
+    />
+  </div>
+<!--   <select [(ngModel)]="role"
+          name="role">
+    <option value="USER">USER</option>
+    <option value="ADMIN">ADMIN</option>
+  </select> -->
+    <button type="submit" (click)="register()">Registrarse</button>
+  </form>
+
+<!--   	<div *ngIf="bSend" class="p-5 card text-center">
+		<h1>Gracias por enviarnos tu petición!</h1>
+	</div> -->
+</div>

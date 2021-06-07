@@ -1,0 +1,47 @@
+.p-3{
+	padding: 15px;
+}
+
+.border-nav{
+	background-color: #569af7;
+}
+
+.text-white{
+	color: white;
+	text-decoration: none;
+	font-family: cursive;
+}
+
+.btn-service{
+	background-color: #569af7;
+	color: white;
+}
+
+.btn-service:hover{
+	background-color: white;
+	color: #569af7!important;
+}
+
+.bg-blue-black{
+	background-color: #a6afb97a!important
+}
+
+.margin-content{
+	margin-top: 100px
+}
+
+@media (max-width: 450px){
+  .width-md {
+    max-width: 200px!important;
+  }
+
+  .position-fixed{
+	position: relative!important;
+  }
+
+  .margin-content{
+	font-size: 0.8rem; 
+	margin-top: 0px
+  }
+
+}

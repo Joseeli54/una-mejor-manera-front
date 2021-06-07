@@ -1,0 +1,156 @@
+<ng-template #postContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Agendar</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="d('Cerrar')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+          <div class="col text-center">
+            <div class="form-group">
+               <form class="form-group w-100" [formGroup]="propertyForm" novalidate>
+	                <div class="form-group">
+	                  <input type="text" class="form-control input-lg" name="" placeholder="Nombre" formControlName="Nombre">
+	                </div>
+
+	                <div class="form-group">
+	                  <textarea type="text" style="max-height: 20vh; min-height: 20vh;" class="form-control input-lg" placeholder="Descripcion" formControlName="Descripcion"></textarea>
+	                </div>
+
+	                <div class="form-group">
+	                  <input type="text" class="form-control input-lg" name="" placeholder="Tipo" formControlName="Tipo">
+	                </div>
+
+	                <div class="form-group text-left">
+	                  <label for="fechaPut">Fecha de Actividad</label>
+	                  <input type="date" class="form-control input-lg" name="" id="fechaPut" formControlName="Fecha">
+	                </div>
+
+	                <div class="form-group text-left">
+	                  <label for="horaInicioPut">Hora Inicio</label>
+	                  <input matInput type="time" class="form-control input-lg" name="" id="horaInicioPut" placeholder="Hora Inicio" formControlName="StartTime">
+					</div>
+
+					<div class="form-group text-left">
+					  <label for="horaFinPut">Hora Fin</label>
+					  <input matInput type="time" class="form-control input-lg" name="" id="horaFinPut" placeholder="Hora Fin" formControlName="EndTime">
+	                </div>
+
+	                <div class="form-group">
+	                   <button type="button" class="btn btn-primary" [disabled]="propertyForm.invalid" (click)="setActividad();">Agendar</button>
+	                </div>
+              </form>
+            </div>
+          </div>
+    </div>
+</ng-template>
+
+<ng-template #putContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Actividad</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="d('Cerrar')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+          <div class="col text-center">
+            <div class="form-group">
+	                <div class="form-group">
+	                  <input type="text" class="form-control input-lg" name="" placeholder="Nombre" [(ngModel)]="nombrePut">
+	                </div>
+
+	                <div class="form-group">
+	                  <textarea type="text" style="max-height: 20vh; min-height: 20vh;" class="form-control input-lg" placeholder="Descripcion" [(ngModel)]="descripcionPut"></textarea>
+	                </div>
+
+	                <div class="form-group">
+	                  <input type="text" class="form-control input-lg" name="" placeholder="Tipo" [(ngModel)]="tipoPut">
+	                </div>
+
+	                <div class="form-group text-left">
+	                  <label for="fecha">Fecha de Actividad</label>
+	                  <input type="date" class="form-control input-lg" id="fecha" name="" [(ngModel)]="fechaPut">
+	                </div>
+
+	                <div class="form-group text-left">
+	                  <label for="horaInicio">Hora de Inicio</label>
+	                  <input matInput type="time" class="form-control input-lg" name="" placeholder="Hora Inicio" id="horaInicio" [(ngModel)]="startTimePut">
+					</div>
+
+					<div class="form-group text-left">
+					  <label for="horaFin">Hora Fin</label>
+					  <input matInput type="time" class="form-control input-lg" name="" placeholder="Hora Fin" id="horaFin" [(ngModel)]="endTimePut">
+	                </div>
+
+	                <div class="form-group">
+	                   <button type="button" class="btn btn-primary" (click)="putActividad(idPut);">Cambiar</button>
+	                </div>
+            </div>
+          </div>
+    </div>
+</ng-template>
+
+<ng-template #ActivityContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">{{ activity.nombre }}</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="d('Cerrar')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+
+          <div class="col text-justify">
+            <div class="form-group">
+            	<p><b>Fecha:</b> {{activity.fecha}} </p>
+            	<p><b>Horario:</b> {{activity.startTime}} - {{activity.endTime}}</p>
+            	<p><b>Creado Por:</b> {{activity.createBy}} </p>
+            	<p><b>Ultima Modificación:</b> {{activity.time}} </p>
+            	<p><b>Tipo de Actividad:</b> {{activity.tipo}} </p>
+               	{{ activity.descripcion }}
+            </div>
+          </div>
+          <div style="display:flex" class="mt-4 justify-content-center" *ngIf="activity.createBy == this.username || this.role == 'ADMIN'">
+  				<a routerLink="/home/activities" (click)="editActivity(putContent, activity._id, activity.nombre, activity.descripcion, activity.tipo, activity.fecha, activity.startTime, activity.endTime)" class="mr-1">
+		            <span class="fa fa-edit fa-2x"></span>
+		            <b style="font-size: 1rem" class="mx-2">Editar</b>
+	            </a>
+  				<a routerLink="/home/activities" style="color: red" (click)="deleteActividad(activity._id)">
+	  				<span class="fa fa-trash fa-2x"></span>
+	            	<b style="font-size: 1rem" class="mx-2">Eliminar</b>
+  				</a>
+  		  </div>
+    </div>
+</ng-template>
+
+<div class="container pt-3">
+	<div class="row justify-content-center px-md-5 pb-4 card">
+
+		<a routerLink="/home/activities" (click)="open(postContent, '', '')" class="icon-add m-4 text-decoration-none">
+	        <li class="fa fa-plus-circle" style="font-size: 2em"></li> 
+	        <b style="font-size: 20px;" class="mx-2">Agendar</b>
+	    </a>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width: 25%">Nombre</th>
+                <th style="width: 65%">Descripcion</th>
+                <th style="width: 10%">Fecha Modificación</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let actividad of actividades; let indice=index" class="bloque-actividad" (click)="verActividad(ActivityContent, actividad)">
+	                <th scope="row">{{actividad.nombre}}</th>
+	                <td>{{actividad.descripcion}}</td>
+	                <td>{{actividad.time}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

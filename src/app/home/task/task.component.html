@@ -1,0 +1,130 @@
+<ng-template #postContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Crear Tarea</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="d('Cerrar')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+          <div class="col text-center">
+            <div class="form-group">
+               <form class="form-group w-100" [formGroup]="propertyForm" novalidate>
+	                <div class="form-group">
+	                  <input type="text" class="form-control input-lg" name="" placeholder="Nombre" formControlName="Nombre">
+	                </div>
+
+	                <div class="form-group">
+	                  <textarea type="text" style="max-height: 20vh; min-height: 20vh;" class="form-control input-lg" placeholder="Descripcion" formControlName="Descripcion"></textarea>
+	                </div>
+
+                	<ng-select [items]="usuarios" class="custom" bindLabel="fullname" bindValue="username" formControlName="idUser" placeholder="Asignar Usuario">
+					</ng-select>
+
+                   <ng-select [items]="actividades" class="custom" bindLabel="nombre" bindValue="_id" formControlName="idActividad" placeholder="Seleccionar Actividad">
+                	</ng-select>
+
+	                <div class="form-group">
+	                   <button type="button" class="btn btn-primary" [disabled]="propertyForm.invalid" (click)="setTarea();">Crear</button>
+	                </div>
+              </form>
+            </div>
+          </div>
+    </div>
+</ng-template>
+
+<ng-template #putContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Tarea</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="d('Cerrar')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+          <div class="col text-center">
+            <div class="form-group">
+	                <div class="form-group">
+	                  <input type="text" class="form-control input-lg" name="" placeholder="Nombre" [(ngModel)]="nombrePut">
+	                </div>
+
+	                <div class="form-group">
+	                  <textarea type="text" style="max-height: 20vh; min-height: 20vh;" class="form-control input-lg" placeholder="Descripcion" [(ngModel)]="descripcionPut"></textarea>
+	                </div>
+
+	                <ng-select [items]="usuarios" class="custom" bindLabel="fullname" bindValue="username" placeholder="Asignar Usuario" [(ngModel)]="idUserPut">
+					</ng-select>
+
+					<ng-select [items]="actividades" class="custom" bindLabel="nombre" bindValue="_id" placeholder="Seleccionar Actividad" [(ngModel)]="idActividadPut">
+                	</ng-select>
+
+	                <div class="form-group">
+	                   <button type="button" class="btn btn-primary" (click)="putTarea(idPut);">Cambiar</button>
+	                </div>
+            </div>
+          </div>
+    </div>
+</ng-template>
+
+<ng-template #TareaContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">{{ tarea.nombre }}</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="d('Cerrar')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+
+          <div class="col text-justify">
+            <div class="form-group">
+            	<p><b>Usuario Encargado:</b> {{nombreUsuario}} </p>
+            	<p><b>Actividad Relacionada:</b> {{nombreActividad}} </p>
+            	<p><b>Creado Por:</b> {{tarea.createBy}} </p>
+            	<p><b>Ultima Modificación:</b> {{tarea.time}} </p>
+
+               	{{ tarea.descripcion }}
+            </div>
+          </div>
+          <div style="display:flex" class="mt-4 justify-content-center" *ngIf="tarea.createBy == this.username || this.role == 'ADMIN'">
+  				<a routerLink="/home/task" (click)="editTarea(putContent, tarea._id, tarea.nombre, tarea.descripcion, tarea.idActividad, tarea.idUser)" class="mr-1">
+		            <span class="fa fa-edit fa-2x"></span>
+		            <b style="font-size: 1rem" class="mx-2">Editar</b>
+	            </a>
+  				<a routerLink="/home/task" style="color: red" (click)="deleteTarea(tarea._id)">
+	  				<span class="fa fa-trash fa-2x"></span>
+	            	<b style="font-size: 1rem" class="mx-2">Eliminar</b>
+  				</a>
+  		  </div>
+    </div>
+</ng-template>
+
+<div class="container pt-3">
+	<div class="row justify-content-center px-md-5 pb-4 card">
+
+		<a routerLink="/home/task" (click)="open(postContent, '', '')" class="icon-add m-4 text-decoration-none">
+	        <li class="fa fa-plus-circle" style="font-size: 2em"></li> 
+	        <b style="font-size: 20px;" class="mx-2">Crear Tarea</b>
+	    </a>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width: 25%">Nombre</th>
+                <th style="width: 65%">Descripcion</th>
+                <th style="width: 10%">Fecha Modificación</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let tarea of tareas; let indice=index" class="bloque-tarea" (click)="verTarea(TareaContent, tarea)">
+	                <th scope="row">{{tarea.nombre}}</th>
+	                <td>{{tarea.descripcion}}</td>
+	                <td>{{tarea.time}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
