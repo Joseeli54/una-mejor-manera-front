@@ -275,13 +275,13 @@ export class PostComponent implements OnInit {
 
 		let time = this.getDateToday();
 
+		$('#cambiar_img_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
 		if(this.urlPreview !== ''){
 
 			const formularioImagen = new FormData();
 	    formularioImagen.append('file', this.archivo);
 	    formularioImagen.append('upload_preset', 'imagen');
-
-	    $('#cambiar_img_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
 	    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
 	    (response: any) => {
@@ -314,6 +314,20 @@ export class PostComponent implements OnInit {
 						"time" : time,
 						"imagen" : ''
 					};
+
+					this.service.putUrlFiles('publicaciones/{id}', data, [id])
+					.then(response => {
+							$('#cambiar_img_button').html("Cambiar");
+							console.log(response._id)
+							if(response._id !== undefined){
+								this.modalReference.close();
+								this.getPublicacion();
+							}
+				    })
+				    .catch(data =>{
+				    		$('#cambiar_img_button').html("Cambiar");
+				        console.log(data.error)
+				    });
 
 	  }
 	}

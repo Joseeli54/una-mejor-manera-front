@@ -117,7 +117,7 @@ export class RegisterComponent implements OnInit {
               });
 
         });
-      }else{
+    }else{
 
             let data = {
                 "nombre" :  this.nombre,
@@ -132,12 +132,10 @@ export class RegisterComponent implements OnInit {
                 "estado" : this.estado
             };
 
-            $('#register_button').html("Registrarse");
-
             this.userService
               .postUrl('register', data)
               .then(response => {
-
+                   $('#register_button').html("Registrarse");
                    console.log(response);
 
                    this.bSend = true;
@@ -145,10 +143,11 @@ export class RegisterComponent implements OnInit {
                    this.router.navigate(['/login']);
               })
               .catch(data =>{
+                   $('#register_button').html("Registrarse");
                    this.errorOcurred(data.error.err.message)
               });
 
-      }
+    }
 }
 
   private messageSuccessfully() {
