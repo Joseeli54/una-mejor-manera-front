@@ -6,6 +6,7 @@ import { UsersService } from '../../users/users.service';
 import { Actividad } from "../../classes/actividad";
 import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-activity',
@@ -134,15 +135,21 @@ export class ActivityComponent implements OnInit {
 			"time": time
 		};
 
+		$('#button_agendar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
 		this.service.postUrl('actividades', data)
 		.then(response => {
-			console.log(response)
-			if(response._id !== undefined){
-				this.modalReference.close();
-				this.getActividad();
-			}
+
+				$('#button_agendar').html("Agendar");
+
+				if(response._id !== undefined){
+					this.modalReference.close();
+					this.getActividad();
+				}
+
 	    })
 	    .catch(data =>{
+	    		$('#button_agendar').html("Agendar");
 	        console.log(data.error)
 	    });
 	}
@@ -161,15 +168,19 @@ export class ActivityComponent implements OnInit {
 			"time": time
 		};
 
+		$('#button_cambiar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
 		this.service.putUrl('actividades/{id}', data, [id])
 		.then(response => {
-			console.log(response._id)
-			if(response._id !== undefined){
-				this.modalReference.close();
-				this.getActividad();
-			}
+				$('#button_cambiar').html("Cambiar");
+				if(response._id !== undefined){
+					this.modalReference.close();
+					this.getActividad();
+				}
 	    })
 	    .catch(data =>{
+
+	    		$('#button_cambiar').html("Cambiar");
 	        console.log(data.error)
 	    });
 	}

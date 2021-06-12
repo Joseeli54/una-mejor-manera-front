@@ -7,6 +7,7 @@ import { Usuario } from '../core/model/usuario.model';
 import { isNullOrUndefined } from 'util';
 import { SweetAlertOptions } from 'sweetalert2';
 import Swal from 'sweetalert2';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-login',
@@ -52,6 +53,8 @@ export class LoginComponent implements OnInit {
       };
     }
 
+    $('#login_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
     this.userService
       .postUrl('login', data)
       .then(response => {
@@ -64,10 +67,13 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('role', response.usuario.role);
               localStorage.setItem('avatar', response.usuario.avatar);
 
+              $('#login_button').html("Iniciar Sesión");
+
               this.messageSuccessfully();
 
             })
       .catch(data =>{
+              $('#login_button').html("Iniciar Sesión");
               this.errorOcurred(data.error.err.message)
       });
     

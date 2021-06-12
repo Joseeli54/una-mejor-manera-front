@@ -26,7 +26,7 @@
                 	</ng-select>
 
 	                <div class="form-group">
-	                   <button type="button" class="btn btn-primary" [disabled]="propertyForm.invalid" (click)="setTarea();">Crear</button>
+	                   <button type="button" class="btn btn-primary" id="button_create" [disabled]="propertyForm.invalid" (click)="setTarea();">Crear</button>
 	                </div>
               </form>
             </div>
@@ -61,7 +61,7 @@
                 	</ng-select>
 
 	                <div class="form-group">
-	                   <button type="button" class="btn btn-primary" (click)="putTarea(idPut);">Cambiar</button>
+	                   <button type="button" class="btn btn-primary" id="button_change" (click)="putTarea(idPut);">Cambiar</button>
 	                </div>
             </div>
           </div>

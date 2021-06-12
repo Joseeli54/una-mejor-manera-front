@@ -99,6 +99,7 @@
     </div>
 
     <input
+      accept="image/png,image/jpeg"
       type="file"
       (change)="capturarImagen($event)"
       name="avatar"
@@ -111,7 +112,7 @@
     <option value="USER">USER</option>
     <option value="ADMIN">ADMIN</option>
   </select> -->
-    <button type="submit" (click)="register()">Registrarse</button>
+    <button type="submit" (click)="register()" id="register_button">Registrarse</button>
   </form>
 
 <!--   	<div *ngIf="bSend" class="p-5 card text-center">

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../users/users.service';
+import { HttpClient , HttpHeaders} from  '@angular/common/http';
 import { SweetAlertOptions } from 'sweetalert2';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-register',
@@ -20,13 +22,14 @@ export class RegisterComponent implements OnInit {
   telefono: string;
   role: string;
   puesto: string;
+  avatar: string;
   urlPreview: any = '';;
   public archivo : any = [];
 	
   passwordError: boolean;
   bSend = false;
 
-  constructor(public userService: UsersService, private router: Router) {}
+  constructor(public userService: UsersService, private router: Router, private  httpClient:  HttpClient) {}
 
   ngOnInit() {
     this.role = "USER";
@@ -61,29 +64,49 @@ export class RegisterComponent implements OnInit {
 
   public register() {
 
-    const Formulario = new FormData();
+    const formularioImagen = new FormData();
+    formularioImagen.append('file', this.archivo);
+    formularioImagen.append('upload_preset', 'avatars');
 
-    Formulario.append('nombre', this.nombre);
-    Formulario.append('apellido', this.apellido);
-    Formulario.append('username', this.username);
-    Formulario.append('email', this.email);
-    Formulario.append('telefono', this.telefono);
-    Formulario.append('password', this.password);
-    Formulario.append('role', this.role);
-    Formulario.append('avatar', this.archivo);
-    Formulario.append('puesto', this.puesto);
+    $('#register_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
-    this.userService
-	    .postUrlFiles('register', Formulario)
-	    .then(response => {
-				   this.bSend = true;
-           this.messageSuccessfully();
-           this.router.navigate(['/login']);
-	    })
-	    .catch(data =>{
-           this.errorOcurred(data.error.err.message)
-	    });
-    }
+    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
+    (response: any) => {
+
+        console.log(response)
+
+        this.avatar = response.secure_url;
+
+        let data = {
+            "nombre" :  this.nombre,
+            "apellido" :  this.apellido,
+            "username" :  this.username,
+            "email" :  this.email,
+            "telefono" :  this.telefono,
+            "password" :  this.password,
+            "role" :  this.role,
+            "avatar" :  this.avatar,
+            "puesto" :  this.puesto
+        };
+
+        $('#register_button').html("Registrarse");
+
+        this.userService
+    	    .postUrl('register', data)
+    	    .then(response => {
+
+               console.log(response);
+
+    				   this.bSend = true;
+               this.messageSuccessfully();
+               this.router.navigate(['/login']);
+    	    })
+    	    .catch(data =>{
+               this.errorOcurred(data.error.err.message)
+    	    });
+
+    });
+}
 
   private messageSuccessfully() {
     let config: SweetAlertOptions = {

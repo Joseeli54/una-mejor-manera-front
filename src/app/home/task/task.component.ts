@@ -9,6 +9,7 @@ import { Usuario } from "../../classes/usuario";
 import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
 import { NgSelectModule, NgOption, NgSelectConfig} from '@ng-select/ng-select';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-task',
@@ -173,8 +174,11 @@ export class TaskComponent implements OnInit {
 			"time" : time
 		};
 
+		$('#button_create').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
 		this.service.postUrl('tareas', data)
 		.then(response => {
+			$('#button_create').html("Crear");
 			console.log(response)
 			if(response._id !== undefined){
 				this.modalReference.close();
@@ -182,6 +186,7 @@ export class TaskComponent implements OnInit {
 			}
     })
     .catch(data =>{
+    		$('#button_create').html("Crear");
         console.log(data.error)
     });
 	}
@@ -198,15 +203,18 @@ export class TaskComponent implements OnInit {
 			"time" : time
 		};
 
+		$('#button_change').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
 		this.service.putUrl('tareas/{id}', data, [id])
 		.then(response => {
-			console.log(response._id)
+			$('#button_change').html("Cambiar");
 			if(response._id !== undefined){
 				this.modalReference.close();
 				this.getTarea();
 			}
 	    })
 	    .catch(data =>{
+	    		$('#button_change').html("Cambiar");
 	        console.log(data.error)
 	    });
 	}

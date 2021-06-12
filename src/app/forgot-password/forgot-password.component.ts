@@ -5,6 +5,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { isNullOrUndefined } from 'util';
 import { SweetAlertOptions } from 'sweetalert2';
 import Swal from 'sweetalert2';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-forgot-password',
@@ -31,12 +32,16 @@ export class ForgotPasswordComponent implements OnInit {
       "subject": "Recuperación de Contraseña",
     };
 
+    $('#button_send').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
     this.userService
       .postUrl('mail/forgotPassword', data)
       .then(response => {
+              $('#button_send').html("Enviar");
               this.emailSendSuccessfully();
             })
       .catch(data =>{
+              $('#button_send').html("Enviar");
               this.errorOcurred(data.error.message);
       });
     

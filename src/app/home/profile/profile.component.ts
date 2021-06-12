@@ -7,6 +7,7 @@ import { Tarea } from "../../classes/tarea";
 import { Usuario } from "../../classes/usuario";
 import { isNullOrUndefined } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient , HttpHeaders} from  '@angular/common/http';
 import { SweetAlertOptions } from 'sweetalert2';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
@@ -39,7 +40,8 @@ export class ProfileComponent implements OnInit {
   public closeResult: string;
 
   constructor(private modalService: NgbModal, private _formBuilder: FormBuilder, 
-          private service: UsersService, private router: ActivatedRoute, private Redirect: Router) { }
+          private service: UsersService, private router: ActivatedRoute, private Redirect: Router, 
+          private  httpClient:  HttpClient) { }
 
   ngOnInit() {
 
@@ -80,18 +82,31 @@ export class ProfileComponent implements OnInit {
     if(this.archivo.name !== archivoEncontrado.name){
 
       this.archivo = archivoEncontrado;
+      const formularioImagen = new FormData();
+      formularioImagen.append('file', this.archivo);
+      formularioImagen.append('upload_preset', 'avatars');
 
-      const Formulario = new FormData();
-      Formulario.append('avatar', this.archivo);
+      $('#boton_editar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
+      this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
+      (response: any) => {
+
+      let data = {
+        "avatar" : response.secure_url
+      }
+
+      $('#boton_editar').html("Editar");
 
       this.service
-        .putUrlFiles('users/imagen/{username}', Formulario, [this.username])
+        .putUrl('users/imagen/{username}', data, [this.username])
         .then(response => {
                 this.usuario = response;
         })
         .catch(data =>{
            console.log(data.error)
         });
+
+      });
 
     }
   }

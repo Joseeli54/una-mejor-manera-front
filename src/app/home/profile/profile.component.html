@@ -66,7 +66,7 @@
           <div class="col text-center">
 
           	<div>
-          			<img src="https://una-mejor-manera.herokuapp.com/{{usuario.avatar}}" class="imagen-perfil-modal">
+          			<img src="{{usuario.avatar}}" class="imagen-perfil-modal">
           	</div>
 
           	<div class="col-md-12 my-3" style="display: none">
@@ -75,7 +75,7 @@
 
             <div class="row">
               <div class="col text-right mt-3">
-                <button class="btn btn-primary" (click)="changeImage()" type="submit">Editar</button>
+                <button class="btn btn-primary" id="boton_editar" (click)="changeImage()" type="submit">Editar</button>
               </div>
               <div class="col text-left mt-3">
                 <button class="btn btn-danger" (click)="deleteImage()" type="submit">Eliminar</button>
@@ -155,7 +155,7 @@
 				<div class="d-flex">
 					<div class="foto-perfil">
 						<a (click)="open(contentImage)">
-							<img src="https://una-mejor-manera.herokuapp.com/{{usuario.avatar}}" class="tamaño-imagen">
+							<img src="{{usuario.avatar}}" class="tamaño-imagen">
 						</a>
 					</div>		
 

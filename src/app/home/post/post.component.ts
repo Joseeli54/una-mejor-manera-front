@@ -7,6 +7,7 @@ import { Publicacion } from "../../classes/publicacion";
 import { Usuario } from "../../classes/usuario";
 import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
+import { HttpClient , HttpHeaders} from  '@angular/common/http';
 import $ from 'jquery';
 
 @Component({
@@ -31,7 +32,7 @@ export class PostComponent implements OnInit {
   public urlPreview : any = '';
 
   constructor(private modalService: NgbModal, private _formBuilder: FormBuilder, 
-  			  private service: UsersService, private router: Router) {
+  			  private service: UsersService, private router: Router, private  httpClient:  HttpClient) {
 	}
 
 	ngOnInit() {
@@ -64,7 +65,7 @@ export class PostComponent implements OnInit {
 	  this.descriptionPut = description;
 
 	  if(imagen !== undefined && imagen !== ''){
-	  	this.urlPreview = "https://una-mejor-manera.herokuapp.com/"+imagen;
+	  	this.urlPreview = imagen;
 	  }
 
 	  this.modalReference = this.modalService.open(content, { size: 'lg', centered: true});
@@ -205,30 +206,60 @@ export class PostComponent implements OnInit {
 
 		let time = this.getDateToday();
 
-		// let data = {
-		// 	"descripcion": this.propertyForm.get('Comentarios').value,
-		// 	"idUser": localStorage.getItem('username'),
-		// 	"time" : time
-		// };
+		if(this.urlPreview !== ''){
+			const formularioImagen = new FormData();
+	    formularioImagen.append('file', this.archivo);
+	    formularioImagen.append('upload_preset', 'imagen');
 
-		const Formulario = new FormData();
+	    $('#publicar_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
-		Formulario.append('descripcion', this.propertyForm.get('Comentarios').value);
-    Formulario.append('idUser', localStorage.getItem('username'));
-    Formulario.append('time', time);
-    Formulario.append('imagen', this.archivo);
+	    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
+	    (response: any) => {
 
-		this.service.postUrlFiles('publicaciones', Formulario)
-		.then(response => {
-			console.log(response._id)
-					if(response._id !== undefined){
-						this.modalReference.close();
-						this.getPublicacion();
-					}
-	    })
-	    .catch(data =>{
-	        console.log(data.error)
-	    });
+	    			console.log(response)
+
+						let data = {
+							"descripcion": this.propertyForm.get('Comentarios').value,
+							"idUser": localStorage.getItem('username'),
+							"time" : time,
+							"imagen" : response.secure_url
+						};
+
+						$('#publicar_button').html("Publicar");
+
+						this.service.postUrl('publicaciones', data)
+						.then(response => {
+							console.log(response._id)
+									if(response._id !== undefined){
+										this.modalReference.close();
+										this.getPublicacion();
+									}
+					    })
+					    .catch(data =>{
+					        console.log(data.error)
+					    });
+			});
+		}else{
+
+			let data = {
+							"descripcion": this.propertyForm.get('Comentarios').value,
+							"idUser": localStorage.getItem('username'),
+							"time" : time,
+							"imagen" : ''
+						};
+
+			this.service.postUrl('publicaciones', data)
+			.then(response => {
+				console.log(response._id)
+						if(response._id !== undefined){
+							this.modalReference.close();
+							this.getPublicacion();
+						}
+		    })
+		    .catch(data =>{
+		        console.log(data.error)
+		    });
+		}
 	}
 
 	public deletePublicacion(id){
@@ -244,36 +275,47 @@ export class PostComponent implements OnInit {
 
 		let time = this.getDateToday();
 
-		// let data = {
-		// 	"descripcion": this.descriptionPut,
-		// 	"time" : time
-		// };
+		if(this.urlPreview !== ''){
 
-		const Formulario = new FormData();
+			const formularioImagen = new FormData();
+	    formularioImagen.append('file', this.archivo);
+	    formularioImagen.append('upload_preset', 'imagen');
 
-		console.log(this.archivo);
+	    $('#cambiar_img_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
-		Formulario.append('descripcion', this.descriptionPut);
-    Formulario.append('time', time);
-    Formulario.append('imagen', this.archivo);
+	    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
+	    (response: any) => {
 
-    if(this.urlPreview == ''){
-    		Formulario.append('flag', '0');
-    }else{
-    		Formulario.append('flag', '1');
-    }
+	    		let data = {
+						"descripcion": this.descriptionPut,
+						"time" : time,
+						"imagen" : response.secure_url
+					};
 
-		this.service.putUrlFiles('publicaciones/{id}', Formulario, [id])
-		.then(response => {
-			console.log(response._id)
-				if(response._id !== undefined){
-					this.modalReference.close();
-					this.getPublicacion();
-				}
-	    })
-	    .catch(data =>{
-	        console.log(data.error)
-	    });
+					$('#cambiar_img_button').html("Cambiar");
+
+					this.service.putUrlFiles('publicaciones/{id}', data, [id])
+					.then(response => {
+							console.log(response._id)
+							if(response._id !== undefined){
+								this.modalReference.close();
+								this.getPublicacion();
+							}
+				    })
+				    .catch(data =>{
+				        console.log(data.error)
+				    });
+
+	  	});
+	  }else{
+
+	  			let data = {
+						"descripcion": this.descriptionPut,
+						"time" : time,
+						"imagen" : ''
+					};
+
+	  }
 	}
 
 	public createForm() {
