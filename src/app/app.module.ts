@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UploadsComponent } from './uploads/uploads.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    NgSelectModule,
     SweetAlert2Module.forRoot()
   ],
   providers: [],

@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   public usuario : Usuario = new Usuario('','','','','','','','','','');
   public tareas : Tarea[] = [];
   public archivo : any = [];
+  public estados : any = [{'nombre' : 'Caracas'}, {'nombre' : 'Monagas'}, {'nombre' : 'Tachira'}]
 
 
   // Variables para edicion
@@ -34,6 +35,7 @@ export class ProfileComponent implements OnInit {
   public email: any;
   public telefono: any;
   public puesto: any;
+  public estado: any;
   public usernameOld : any;
   public role : any;
   public modalReference: any;
@@ -118,7 +120,7 @@ export class ProfileComponent implements OnInit {
   public deleteImage(){
 
     let data = {
-      avatar : ''
+      avatar : 'https://res.cloudinary.com/ucab/image/upload/v1623484253/foto-perfil-defecto_pfsou3.jpg'
     }
     
     this.service
@@ -145,6 +147,8 @@ export class ProfileComponent implements OnInit {
           this.usernameOld = this.usuario.username;
           this.username = this.usuario.username;
           this.role = this.usuario.role;
+          this.estado = this.usuario.estado;
+
 
           this.getTarea();
         })
@@ -177,6 +181,7 @@ export class ProfileComponent implements OnInit {
       "email": this.email,
       "telefono": this.telefono,
       "puesto": this.puesto,
+      "estado": this.estado,
       "username": this.usernameOld
     };
 
@@ -190,6 +195,7 @@ export class ProfileComponent implements OnInit {
           this.email = response.email;
           this.telefono = response.telefono;
           this.puesto = response.puesto;
+          this.estado = response.estado;
           
           if(this.username == localStorage.getItem('username')) localStorage.setItem('username', response.username);
           

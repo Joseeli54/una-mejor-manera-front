@@ -5,7 +5,7 @@
 <!--     <h1>Register</h1> -->
   
   <div class="mb-3">
-  	<a routerLink="/login"  class="mr-3">
+    <a routerLink="/login"  class="mr-3">
       <li class="fa fa-arrow-left fa-2x" style="color: #000102bf;"></li>
     </a>
     <b style=" font-size: 1.8rem;color: #000102bf;"> 
@@ -71,6 +71,11 @@
     />
   </div>
   <div>
+    <ng-select [items]="estados" class="custom" name="estado" bindLabel="nombre" bindValue="nombre" placeholder="Estado" 
+    [(ngModel)]="estado">
+    </ng-select>
+  </div>
+  <div>
       <span style="color: #000102bf;" class="ml-1"> 
           <b>Contraseña <strong style="color:red">*</strong></b>
       </span>
@@ -91,7 +96,7 @@
   </div>
     <div>
 
-    <div *ngIf="this.urlPreview !== ''" class="position-relative">
+    <div *ngIf="this.urlPreview !== ''" class="position-relative text-center">
       <a class="fa fa-times bg-danger text-white position-absolute p-1 text-decoration-none" 
       (click)="clickEliminarImagen()"></a>
       <img [src]="urlPreview" width="150" height="auto" > 
@@ -105,7 +110,10 @@
       name="avatar"
       id="avatar"
       placeholder="Ingrese su foto de perfil*"
+      style="display: none;"
     />
+
+    <button (click)="clickInsertarImagen()">Agregar una foto de Perfil</button>
   </div>
 <!--   <select [(ngModel)]="role"
           name="role">
@@ -115,7 +123,7 @@
     <button type="submit" (click)="register()" id="register_button">Registrarse</button>
   </form>
 
-<!--   	<div *ngIf="bSend" class="p-5 card text-center">
-		<h1>Gracias por enviarnos tu petición!</h1>
-	</div> -->
+<!--    <div *ngIf="bSend" class="p-5 card text-center">
+    <h1>Gracias por enviarnos tu petición!</h1>
+  </div> -->
 </div>

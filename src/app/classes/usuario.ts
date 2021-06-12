@@ -10,6 +10,7 @@ export class Usuario {
     avatar: string;
     puesto: string;
     fullname: string;
+    estado: string;
 
     constructor(_id: string, nombre: string, apellido: string, username: string, 
                 email: string, telefono: string, password: string, role: string, avatar:string, puesto: string) {

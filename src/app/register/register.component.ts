@@ -23,9 +23,11 @@ export class RegisterComponent implements OnInit {
   role: string;
   puesto: string;
   avatar: string;
-  urlPreview: any = '';;
+  estado: string;
+  urlPreview: any = '';
+  public estados : any = [{'nombre' : 'Caracas'}, {'nombre' : 'Monagas'}, {'nombre' : 'Tachira'}]
   public archivo : any = [];
-	
+  
   passwordError: boolean;
   bSend = false;
 
@@ -62,6 +64,10 @@ export class RegisterComponent implements OnInit {
     this.urlPreview = '';
   }
 
+  public clickInsertarImagen(){
+    $('#avatar').click();
+  }
+
   public register() {
 
     const formularioImagen = new FormData();
@@ -70,42 +76,79 @@ export class RegisterComponent implements OnInit {
 
     $('#register_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
-    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
-    (response: any) => {
+    console.log(this.estado)
 
-        console.log(response)
+    if(this.urlPreview !== ''){
 
-        this.avatar = response.secure_url;
+        this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
+        (response: any) => {
 
-        let data = {
-            "nombre" :  this.nombre,
-            "apellido" :  this.apellido,
-            "username" :  this.username,
-            "email" :  this.email,
-            "telefono" :  this.telefono,
-            "password" :  this.password,
-            "role" :  this.role,
-            "avatar" :  this.avatar,
-            "puesto" :  this.puesto
-        };
+            console.log(response)
 
-        $('#register_button').html("Registrarse");
+            this.avatar = response.secure_url;
 
-        this.userService
-    	    .postUrl('register', data)
-    	    .then(response => {
+            let data = {
+                "nombre" :  this.nombre,
+                "apellido" :  this.apellido,
+                "username" :  this.username,
+                "email" :  this.email,
+                "telefono" :  this.telefono,
+                "password" :  this.password,
+                "role" :  this.role,
+                "avatar" :  this.avatar,
+                "puesto" :  this.puesto,
+                "estado" : this.estado
+            };
 
-               console.log(response);
+            $('#register_button').html("Registrarse");
 
-    				   this.bSend = true;
-               this.messageSuccessfully();
-               this.router.navigate(['/login']);
-    	    })
-    	    .catch(data =>{
-               this.errorOcurred(data.error.err.message)
-    	    });
+            this.userService
+              .postUrl('register', data)
+              .then(response => {
 
-    });
+                   console.log(response);
+
+                   this.bSend = true;
+                   this.messageSuccessfully();
+                   this.router.navigate(['/login']);
+              })
+              .catch(data =>{
+                   this.errorOcurred(data.error.err.message)
+              });
+
+        });
+      }else{
+
+            let data = {
+                "nombre" :  this.nombre,
+                "apellido" :  this.apellido,
+                "username" :  this.username,
+                "email" :  this.email,
+                "telefono" :  this.telefono,
+                "password" :  this.password,
+                "role" :  this.role,
+                "avatar" :  'https://res.cloudinary.com/ucab/image/upload/v1623484253/foto-perfil-defecto_pfsou3.jpg',
+                "puesto" :  this.puesto,
+                "estado" : this.estado
+            };
+
+            $('#register_button').html("Registrarse");
+
+            this.userService
+              .postUrl('register', data)
+              .then(response => {
+
+                   console.log(response);
+
+                   this.bSend = true;
+                   this.messageSuccessfully();
+                   this.router.navigate(['/login']);
+              })
+              .catch(data =>{
+                   this.errorOcurred(data.error.err.message)
+              });
+
+      }
 }
 
   private messageSuccessfully() {
