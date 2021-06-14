@@ -36,6 +36,8 @@ export class ProfileComponent implements OnInit {
   public telefono: any;
   public puesto: any;
   public estado: any;
+  public avatar: any;
+  public avatar_public_id: any;
   public usernameOld : any;
   public role : any;
   public modalReference: any;
@@ -93,21 +95,27 @@ export class ProfileComponent implements OnInit {
       this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
       (response: any) => {
 
-      let data = {
-        "avatar" : response.secure_url
-      }
+          let data = {
+            "avatar" : response.secure_url,
+            "avatar_public_id" : response.public_id
+          }
 
-      $('#boton_editar').html("Editar");
+          $('#boton_editar').html("Editar");
 
-      this.service
-        .putUrl('users/imagen/{username}', data, [this.username])
-        .then(response => {
-                this.usuario = response;
-        })
-        .catch(data =>{
-           console.log(data.error)
-        });
+          this.service
+            .putUrl('users/imagen/{username}', data, [this.username])
+            .then(response => {
+                    this.usuario = response;
+                    this.avatar = this.usuario.avatar;
+                    this.avatar_public_id = this.usuario.avatar_public_id;
+            })
+            .catch(data =>{
+               console.log(data.error)
+            });
 
+      }, 
+      (err : any) => {
+        this.errorOcurred('No hay conexión');
       });
 
     }
@@ -119,18 +127,25 @@ export class ProfileComponent implements OnInit {
 
   public deleteImage(){
 
-    let data = {
-      avatar : 'https://res.cloudinary.com/ucab/image/upload/v1623484253/foto-perfil-defecto_pfsou3.jpg'
+    if(this.avatar_public_id !== ''){
+
+        let data = {
+          avatar : 'https://res.cloudinary.com/ucab/image/upload/v1623484253/foto-perfil-defecto_pfsou3.jpg',
+          avatar_public_id : ''
+        }
+              
+        this.service
+        .putUrl('users/imagen/{username}', data, [this.username])
+        .then(response => {
+          this.usuario = response;
+          this.avatar = this.usuario.avatar;
+          this.avatar_public_id = this.usuario.avatar_public_id;
+        })
+        .catch(data =>{
+           console.log(data.error)
+        });
+
     }
-    
-    this.service
-      .putUrl('users/imagen/{username}', data, [this.username])
-      .then(response => {
-              this.usuario = response;
-      })
-      .catch(data =>{
-         console.log(data.error)
-      });
   }
 
   public getUser(){
@@ -148,7 +163,8 @@ export class ProfileComponent implements OnInit {
           this.username = this.usuario.username;
           this.role = this.usuario.role;
           this.estado = this.usuario.estado;
-
+          this.avatar = this.usuario.avatar;
+          this.avatar_public_id = this.usuario.avatar_public_id;
 
           this.getTarea();
         })
@@ -220,6 +236,10 @@ export class ProfileComponent implements OnInit {
         this.errorOcurred(data.error);
     });
 
+  }
+
+  public eliminarUsuario(){
+    this.confirmDeleteUser();
   }
 
   public convertirAdmin(){
@@ -313,6 +333,18 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  private deleteSuccessfully() {
+    let config: SweetAlertOptions = {
+      title: 'El usuario ha sido eliminado satisfactoriamente',
+      type: 'success',
+      showConfirmButton: false,
+      timer: 2500
+    };
+
+    Swal.fire(config).then(result => {
+    });
+  }
+
   private errorOcurred(message) {
     let config: SweetAlertOptions = {
       title: message,
@@ -321,6 +353,47 @@ export class ProfileComponent implements OnInit {
     };
 
     Swal.fire(config).then(result => {
+    });
+  }
+
+  private confirmDeleteUser(){
+    let config: SweetAlertOptions = {
+      title: "Esta seguro que desea eliminar esta cuenta? Se eliminara permanentemente.",
+      type: 'warning',
+      showConfirmButton: true,
+      showCancelButton:true,
+      cancelButtonText:"No",
+      confirmButtonColor:"#3085d6",
+      confirmButtonText:'Si, eliminalo!',
+    };
+
+    Swal.fire(config).then(result => {
+
+      if(result.value == true){
+        this.service.deleteUrl('users/username/{username}', [this.username])
+        .then(data => {  
+           this.deleteSuccessfully();
+           this.modalReference.close();
+
+           if(this.usernameCurrent == this.username){
+
+             localStorage.removeItem('token');
+             localStorage.removeItem('email');
+             localStorage.removeItem('role');
+             localStorage.removeItem('username');
+             localStorage.removeItem('avatar');
+             localStorage.setItem('isLoggedIn', "false");  
+
+             this.Redirect.navigateByUrl('/login');
+           }else{
+             this.Redirect.navigateByUrl('/home/post');
+           }
+        })
+        .catch(data =>{
+           this.errorOcurred(data.error.err.message);
+        });
+      } 
+
     });
   }
 

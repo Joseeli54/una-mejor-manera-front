@@ -25,7 +25,7 @@ export class PostComponent implements OnInit {
   public descriptionPut : any;
   public idPut : any;
   public imagePut : any;
-  public publicaciones : Publicacion[] = []
+  public publicaciones : Publicacion[] = [];
   public usuarios : Usuario[] = []
   public archivo : any = [];
   public part : any = 5;
@@ -222,7 +222,8 @@ export class PostComponent implements OnInit {
 							"descripcion": this.propertyForm.get('Comentarios').value,
 							"idUser": localStorage.getItem('username'),
 							"time" : time,
-							"imagen" : response.secure_url
+							"imagen" : response.secure_url,
+							"imagen_public_id" : response.public_id
 						};
 
 						$('#publicar_button').html("Publicar");
@@ -233,6 +234,8 @@ export class PostComponent implements OnInit {
 									if(response._id !== undefined){
 										this.modalReference.close();
 										this.getPublicacion();
+										this.clickEliminarImagen();
+	  								this.limpiarInputDescription();
 									}
 					    })
 					    .catch(data =>{
@@ -245,7 +248,8 @@ export class PostComponent implements OnInit {
 							"descripcion": this.propertyForm.get('Comentarios').value,
 							"idUser": localStorage.getItem('username'),
 							"time" : time,
-							"imagen" : ''
+							"imagen" : '',
+							"imagen_public_id" : ''
 						};
 
 			this.service.postUrl('publicaciones', data)
@@ -268,7 +272,7 @@ export class PostComponent implements OnInit {
 		.then(data => { 
 	    	this.getPublicacion(); 
 	    })
-	    .catch(data =>{});
+	  .catch(data =>{});
 	}
 
 	public putPublicacion(id){
@@ -289,17 +293,20 @@ export class PostComponent implements OnInit {
 	    		let data = {
 						"descripcion": this.descriptionPut,
 						"time" : time,
-						"imagen" : response.secure_url
+						"imagen" : response.secure_url,
+						"imagen_public_id" : response.public_id
 					};
 
 					$('#cambiar_img_button').html("Cambiar");
 
-					this.service.putUrlFiles('publicaciones/{id}', data, [id])
+					this.service.putUrl('publicaciones/{id}', data, [id])
 					.then(response => {
 							console.log(response._id)
 							if(response._id !== undefined){
 								this.modalReference.close();
 								this.getPublicacion();
+								this.clickEliminarImagen();
+	  						this.limpiarInputDescription();
 							}
 				    })
 				    .catch(data =>{
@@ -312,10 +319,11 @@ export class PostComponent implements OnInit {
 	  			let data = {
 						"descripcion": this.descriptionPut,
 						"time" : time,
-						"imagen" : ''
+						"imagen" : '',
+						"imagen_public_id" : ''
 					};
 
-					this.service.putUrlFiles('publicaciones/{id}', data, [id])
+					this.service.putUrl('publicaciones/{id}', data, [id])
 					.then(response => {
 							$('#cambiar_img_button').html("Cambiar");
 							console.log(response._id)

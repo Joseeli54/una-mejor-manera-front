@@ -24,6 +24,10 @@ export class RegisterComponent implements OnInit {
   puesto: string;
   avatar: string;
   estado: string;
+
+  delete_token: string;
+  public_id: string;
+
   urlPreview: any = '';
   public estados : any = [{'nombre' : 'Caracas'}, {'nombre' : 'Monagas'}, {'nombre' : 'Tachira'}]
   public archivo : any = [];
@@ -83,8 +87,6 @@ export class RegisterComponent implements OnInit {
         this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
         (response: any) => {
 
-            console.log(response)
-
             this.avatar = response.secure_url;
 
             let data = {
@@ -96,6 +98,7 @@ export class RegisterComponent implements OnInit {
                 "password" :  this.password,
                 "role" :  this.role,
                 "avatar" :  this.avatar,
+                "avatar_public_id" :  response.public_id,
                 "puesto" :  this.puesto,
                 "estado" : this.estado
             };
@@ -116,6 +119,11 @@ export class RegisterComponent implements OnInit {
                    this.errorOcurred(data.error.err.message)
               });
 
+        }, 
+        (err : any) => {
+            $('#register_button').html("Registrarse");
+            console.log(err)
+            this.errorOcurred(err.statusText);
         });
     }else{
 
@@ -128,6 +136,7 @@ export class RegisterComponent implements OnInit {
                 "password" :  this.password,
                 "role" :  this.role,
                 "avatar" :  'https://res.cloudinary.com/ucab/image/upload/v1623484253/foto-perfil-defecto_pfsou3.jpg',
+                "avatar_public_id" :  '',
                 "puesto" :  this.puesto,
                 "estado" : this.estado
             };
@@ -148,7 +157,7 @@ export class RegisterComponent implements OnInit {
               });
 
     }
-}
+  }
 
   private messageSuccessfully() {
     let config: SweetAlertOptions = {

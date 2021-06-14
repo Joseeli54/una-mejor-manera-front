@@ -3,6 +3,7 @@ export class Publicacion {
     descripcion: string;
     idUser: string;
     avatar: string;
+    imagen_public_id: string;
 
     constructor(_id: string, descripcion: string, idUser: string, avatar: string) {
       this._id = _id;

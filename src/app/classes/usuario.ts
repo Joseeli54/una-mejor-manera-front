@@ -8,6 +8,7 @@ export class Usuario {
     password: string;
     role: string;
     avatar: string;
+    avatar_public_id: string;
     puesto: string;
     fullname: string;
     estado: string;
