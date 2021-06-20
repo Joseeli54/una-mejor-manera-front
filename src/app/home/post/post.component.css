@@ -94,10 +94,10 @@
 
 @media (max-width: 600px){
 
-	.imagen-post{
+	/*.imagen-post{
 		width: 100%;
 	}
-
+*/
 	.modal-image-responsive-vertical{
 		height: auto;
 		width: 100%;

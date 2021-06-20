@@ -176,12 +176,15 @@ export class PostComponent implements OnInit {
 
 	public getPublicacion(){
 
+		$('#spinner').show();
+
 		this.service.getUrl('publicaciones/part/{cont}', [this.part])
 	    .then(data => { 
 	    	
 	    	this.service.getUrl('users')
 	    	.then(data2 => { 
-
+	    		$('#spinner').hide();
+					
 					this.publicaciones = data;
 					this.usuarios = data2;
 
@@ -258,6 +261,7 @@ export class PostComponent implements OnInit {
 						if(response._id !== undefined){
 							this.modalReference.close();
 							this.getPublicacion();
+							this.limpiarInputDescription();
 						}
 		    })
 		    .catch(data =>{
@@ -330,6 +334,7 @@ export class PostComponent implements OnInit {
 							if(response._id !== undefined){
 								this.modalReference.close();
 								this.getPublicacion();
+								this.limpiarInputDescription();
 							}
 				    })
 				    .catch(data =>{
