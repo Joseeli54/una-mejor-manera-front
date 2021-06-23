@@ -14,6 +14,7 @@ import { UploadsComponent } from './uploads/uploads.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxImageCompressService } from 'ngx-image-compress';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgSelectModule,
     SweetAlert2Module.forRoot()
   ],
-  providers: [],
+  providers: [NgxImageCompressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

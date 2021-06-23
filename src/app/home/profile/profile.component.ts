@@ -9,6 +9,7 @@ import { isNullOrUndefined } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient , HttpHeaders} from  '@angular/common/http';
 import { SweetAlertOptions } from 'sweetalert2';
+import { NgxImageCompressService } from 'ngx-image-compress';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit {
   public usuario : Usuario = new Usuario('','','','','','','','','','');
   public tareas : Tarea[] = [];
   public archivo : any = [];
+  public urlPreview: any = '';
   public estados : any = [{'nombre' : 'Caracas'}, {'nombre' : 'Monagas'}, {'nombre' : 'Tachira'}]
 
 
@@ -45,7 +47,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private _formBuilder: FormBuilder, 
           private service: UsersService, private router: ActivatedRoute, private Redirect: Router, 
-          private  httpClient:  HttpClient) { }
+          private  httpClient:  HttpClient,
+          private imageCompress: NgxImageCompressService) { }
 
   ngOnInit() {
 
@@ -81,44 +84,77 @@ export class ProfileComponent implements OnInit {
   }
 
   public capturarImagen(event){
+    var  fileName : any;
     const archivoEncontrado = event.target.files[0];
 
     if(this.archivo.name !== archivoEncontrado.name){
-
+      
       this.archivo = archivoEncontrado;
-      const formularioImagen = new FormData();
-      formularioImagen.append('file', this.archivo);
-      formularioImagen.append('upload_preset', 'avatars');
+      fileName = this.archivo['name'];
 
-      $('#boton_editar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+      if (event.target.files && event.target.files[0]) {
+        var reader = new FileReader();
 
-      this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
-      (response: any) => {
+        reader.onload = (event: ProgressEvent) => {
+          this.urlPreview = (<FileReader>event.target).result;
+          this.compressFile(this.urlPreview, fileName)
+        }
 
-          let data = {
-            "avatar" : response.secure_url,
-            "avatar_public_id" : response.public_id
-          }
-
-          $('#boton_editar').html("Editar");
-
-          this.service
-            .putUrl('users/imagen/{username}', data, [this.username])
-            .then(response => {
-                    this.usuario = response;
-                    this.avatar = this.usuario.avatar;
-                    this.avatar_public_id = this.usuario.avatar_public_id;
-            })
-            .catch(data =>{
-               console.log(data.error)
-            });
-
-      }, 
-      (err : any) => {
-        this.errorOcurred('No hay conexión');
-      });
+        reader.readAsDataURL(event.target.files[0]);
+      }
 
     }
+  }
+
+  public compressFile(image, fileName) {
+        var orientation = -1;
+
+        console.warn('Size in bytes is now:',  this.imageCompress.byteCount(image)/(1024*1024));
+        
+        this.imageCompress.compressFile(image, orientation, 50, 50).then(
+        result => {
+            this.urlPreview = result;
+            
+            // Compress the image and change the file archivo
+            console.warn('Size in bytes after compression:',  this.imageCompress.byteCount(result)/(1024*1024));
+            const imageName = fileName;
+            this.archivo = new File([result], imageName, { type: 'image/jpeg' });
+
+
+            //Asign form for send to cloundinary
+            const formularioImagen = new FormData();
+            formularioImagen.append('file', this.archivo);
+            formularioImagen.append('upload_preset', 'avatars');
+
+            $('#boton_editar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
+
+            this.httpClient.post(`https://api.cloudinary.com/v1_1/inversiones-jr/image/upload`, formularioImagen).subscribe( 
+            (response: any) => {
+
+                let data = {
+                  "avatar" : response.secure_url,
+                  "avatar_public_id" : response.public_id
+                }
+
+                $('#boton_editar').html("Editar");
+
+                this.service
+                  .putUrl('users/imagen/{username}', data, [this.username])
+                  .then(response => {
+                          this.usuario = response;
+                          this.avatar = this.usuario.avatar;
+                          this.avatar_public_id = this.usuario.avatar_public_id;
+                  })
+                  .catch(data =>{
+                     console.log(data.error)
+                  });
+
+            }, 
+            (err : any) => {
+              this.errorOcurred('No hay conexión');
+            });
+        });
+
   }
 
   public changeImage(){

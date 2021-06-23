@@ -26,6 +26,7 @@
     "bootstrap": "^4.6.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
+    "ngx-image-compress": "^11.0.3",
     "popper.js": "^1.16.1",
     "rxjs": "~6.4.0",
     "sweetalert2": "^8.9.0",

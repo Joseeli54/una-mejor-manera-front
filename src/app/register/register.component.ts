@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import { HttpClient , HttpHeaders} from  '@angular/common/http';
 import { SweetAlertOptions } from 'sweetalert2';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router } from '@angular/router';
+import { NgxImageCompressService } from 'ngx-image-compress';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
@@ -35,25 +36,52 @@ export class RegisterComponent implements OnInit {
   passwordError: boolean;
   bSend = false;
 
-  constructor(public userService: UsersService, private router: Router, private  httpClient:  HttpClient) {}
+  constructor(public userService: UsersService, private router: Router, private  httpClient:  HttpClient, 
+              private imageCompress: NgxImageCompressService) {}
 
   ngOnInit() {
     this.role = "USER";
   }
 
   public capturarImagen(event){
+    var  fileName : any;
     const archivoEncontrado = event.target.files[0];
     this.archivo = archivoEncontrado;
+
+    fileName = this.archivo['name'];
 
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
 
       reader.onload = (event: ProgressEvent) => {
         this.urlPreview = (<FileReader>event.target).result;
+        this.compressFile(this.urlPreview, fileName)
       }
 
       reader.readAsDataURL(event.target.files[0]);
     }
+  }
+
+  public compressFile(image, fileName) {
+        var orientation = -1;
+
+        console.warn('Size in bytes is now:',  this.imageCompress.byteCount(image)/(1024*1024));
+        
+        this.imageCompress.compressFile(image, orientation, 50, 50).then(
+        result => {
+            this.urlPreview = result;
+            
+            console.warn('Size in bytes after compression:',  this.imageCompress.byteCount(result)/(1024*1024));
+            // create file from byte
+            const imageName = fileName;
+            
+            // call method that creates a blob from dataUri
+            // const imageBlob = this.dataURItoBlob(this.urlPreview.split(',')[1]);
+
+            //imageFile created below is the new compressed file which can be send to API in form data
+            this.archivo = new File([result], imageName, { type: 'image/jpeg' });
+        });
+
   }
 
   public clickEliminarImagen(){
