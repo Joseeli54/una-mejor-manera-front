@@ -237,7 +237,7 @@ export class PostComponent implements OnInit {
 
 		let time = this.getDateToday();
 
-		if(this.urlPreview !== ''){
+		if(this.urlPreview !== '' && !this.empty(this.archivo)){
 			const formularioImagen = new FormData();
 	    formularioImagen.append('file', this.archivo);
 	    formularioImagen.append('upload_preset', 'imagen');
@@ -313,7 +313,7 @@ export class PostComponent implements OnInit {
 
 		$('#cambiar_img_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
-		if(this.urlPreview !== ''){
+		if(this.urlPreview !== '' && !this.empty(this.archivo)){
 
 			const formularioImagen = new FormData();
 	    formularioImagen.append('file', this.archivo);
@@ -382,6 +382,14 @@ export class PostComponent implements OnInit {
 	public masPublicaciones(){
 		this.part = this.part + 5;
 		this.getPublicacion();
+	}
+
+	public empty(str){
+		if(str == null || str == '' || str == undefined || str == "[]"){
+			return true;
+		}
+
+		return false;
 	}
 
 }
