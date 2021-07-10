@@ -313,39 +313,67 @@ export class PostComponent implements OnInit {
 
 		$('#cambiar_img_button').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
 
-		if(this.urlPreview !== '' && !this.empty(this.archivo)){
+		if(this.urlPreview !== ''){
 
-			const formularioImagen = new FormData();
-	    formularioImagen.append('file', this.archivo);
-	    formularioImagen.append('upload_preset', 'imagen');
+			console.log(this.archivo)
 
-	    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
-	    (response: any) => {
+	    if(!this.empty(this.archivo)){
 
-	    		let data = {
-						"descripcion": this.descriptionPut,
-						"time" : time,
-						"imagen" : response.secure_url,
-						"imagen_public_id" : response.public_id
-					};
+		    		const formularioImagen = new FormData();
+				    formularioImagen.append('file', this.archivo);
+				    formularioImagen.append('upload_preset', 'imagen');
 
-					$('#cambiar_img_button').html("Cambiar");
+				    this.httpClient.post(`https://api.cloudinary.com/v1_1/ucab/image/upload`, formularioImagen).subscribe( 
+				    (response: any) => {
 
-					this.service.putUrl('publicaciones/{id}', data, [id])
-					.then(response => {
-							console.log(response._id)
-							if(response._id !== undefined){
-								this.modalReference.close();
-								this.getPublicacion();
-								this.clickEliminarImagen();
-	  						this.limpiarInputDescription();
-							}
-				    })
-				    .catch(data =>{
-				        console.log(data.error)
-				    });
+				    		let data = {
+									"descripcion": this.descriptionPut,
+									"time" : time,
+									"imagen" : response.secure_url,
+									"imagen_public_id" : response.public_id
+								};
 
-	  	});
+								$('#cambiar_img_button').html("Cambiar");
+
+								this.service.putUrl('publicaciones/{id}', data, [id])
+								.then(response => {
+										console.log(response._id)
+										if(response._id !== undefined){
+											this.modalReference.close();
+											this.getPublicacion();
+											this.clickEliminarImagen();
+				  						this.limpiarInputDescription();
+										}
+							    })
+							    .catch(data =>{
+							        console.log(data.error)
+							    });
+
+				  	});
+		  	}else{
+
+		  			let data = {
+							"descripcion": this.descriptionPut,
+							"time" : time
+						};
+
+						this.service.putUrl('publicaciones/withoutimage/{id}', data, [id])
+						.then(response => {
+								$('#cambiar_img_button').html("Cambiar");
+								console.log(response._id)
+								if(response._id !== undefined){
+									this.modalReference.close();
+									this.getPublicacion();
+									this.limpiarInputDescription();
+								}
+					    })
+					    .catch(data =>{
+					    		$('#cambiar_img_button').html("Cambiar");
+					        console.log(data.error)
+					    });
+
+		  	}
+
 	  }else{
 
 	  			let data = {
