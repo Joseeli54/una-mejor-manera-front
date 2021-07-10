@@ -15,6 +15,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxImageCompressService } from 'ngx-image-compress';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { NgxImageCompressService } from 'ngx-image-compress';
     BrowserAnimationsModule,
     HttpClientModule,
     NgSelectModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [NgxImageCompressService],
   bootstrap: [AppComponent]
