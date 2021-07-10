@@ -8,50 +8,50 @@
   "start_url": "./",
   "icons": [
     {
-      "src": "assets/icons/logo-icon-app-72.png",
-      "sizes": "72x62",
+      "src": "assets/icons/logo-icon-app-62x62.png",
+      "sizes": "62x62",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-96.png",
-      "sizes": "96x83",
+      "src": "assets/icons/logo-icon-app-83x83.png",
+      "sizes": "83x83",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-128.png",
-      "sizes": "128x111",
+      "src": "assets/icons/logo-icon-app-111x111.png",
+      "sizes": "111x111",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-144.png",
-      "sizes": "144x125",
+      "src": "assets/icons/logo-icon-app-125x125.png",
+      "sizes": "125x125",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-152.png",
-      "sizes": "152x132",
+      "src": "assets/icons/logo-icon-app-132x132.png",
+      "sizes": "132x132",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-192.png",
-      "sizes": "192x166",
+      "src": "assets/icons/logo-icon-app-166x166.png",
+      "sizes": "166x166",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-384.png",
-      "sizes": "384x333",
+      "src": "assets/icons/logo-icon-app-333x333.png",
+      "sizes": "333x333",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/logo-icon-app-512.png",
-      "sizes": "512x443",
+      "src": "assets/icons/logo-icon-app-443x443.png",
+      "sizes": "443x443",
       "type": "image/png",
       "purpose": "maskable any"
     }
