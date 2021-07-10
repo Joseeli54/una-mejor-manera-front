@@ -385,7 +385,7 @@ export class PostComponent implements OnInit {
 	}
 
 	public empty(str){
-		if(str == null || str == '' || str == undefined || str == "[]"){
+		if(str == null || str == '' || str == undefined || str == "[]" || str.length == 0){
 			return true;
 		}
 
