@@ -364,6 +364,7 @@ export class PostComponent implements OnInit {
 								if(response._id !== undefined){
 									this.modalReference.close();
 									this.getPublicacion();
+									this.clickEliminarImagen();
 									this.limpiarInputDescription();
 								}
 					    })
