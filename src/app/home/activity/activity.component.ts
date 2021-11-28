@@ -101,7 +101,7 @@ export class ActivityComponent implements OnInit {
 		}
 	}
 
-	private getDateToday(): string{
+	public getDateToday(): string{
 
 		var hoy = new Date();
 		var fecha = hoy.getFullYear() + '-' + ( hoy.getMonth() + 1 ) + '-' + hoy.getDate();
