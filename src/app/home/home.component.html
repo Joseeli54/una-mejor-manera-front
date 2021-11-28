@@ -25,9 +25,10 @@
 		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		          Cuenta
 		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="left: -55%">
-		          <a class="dropdown-item" (click)="Gotoprofile()">Perfil</a>
-		          <a class="dropdown-item" (click)="logout()">Cerrar Sesión</a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="left: -60%">
+		          <a class="dropdown-item" (click)="Gotoprofile()"><i class="fa fa-user-circle"></i> Perfil</a>
+		          <a class="dropdown-item" routerLink="/home/graphics" *ngIf="this.role == 'ADMIN'" (click)="collapseHide()"><i class="fa fa-bar-chart"></i> Estadisticas</a>
+		          <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i> Cerrar Sesión</a>
 		        </div>
 		      </li>
 		    </ul>

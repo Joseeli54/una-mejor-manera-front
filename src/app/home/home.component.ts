@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
 	public httpOption : any;
 	public username : any;
 	public bLogger = false;
+	public role : any;
 
 	constructor(private router: Router) {}
 
@@ -22,13 +23,15 @@ export class HomeComponent implements OnInit {
 	    
 	    var rol = localStorage.getItem('role');
 	    var email = localStorage.getItem('email');
+
+	    this.role = rol;
 	    
 	    if (!isNullOrUndefined(rol) && !isNullOrUndefined(email)) {
 	      	this.bLogger = true;
 	      	this.username = localStorage.getItem('username');
 	      	this.router.navigateByUrl('home/post');
 	    }else{
-	    	this.router.navigateByUrl('login');
+	    	this.router.navigateByUrl('/');
 	    }
 
 	}
@@ -41,7 +44,7 @@ export class HomeComponent implements OnInit {
   	localStorage.removeItem('avatar');
   	localStorage.setItem('isLoggedIn', "false");  
 
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/');
 	}
 
 	public Gotoprofile(){

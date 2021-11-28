@@ -5,7 +5,7 @@ import { PostComponent } from './post/post.component';
 import { ActivityComponent } from './activity/activity.component';
 import { TaskComponent } from './task/task.component';
 import { ProfileComponent } from './profile/profile.component';
-
+import { GraphicsComponent } from './graphics/graphics.component';
 
 const routes: Routes = [
 	{
@@ -17,6 +17,7 @@ const routes: Routes = [
       { component: TaskComponent, path: 'task' },
       { component: ProfileComponent, path: 'profile/:username' },
       { component: ProfileComponent, path: 'myprofile/:username' },
+      { component: GraphicsComponent, path: 'graphics' }
     ]
   },
  ];

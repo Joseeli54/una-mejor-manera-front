@@ -7,8 +7,7 @@ import { UploadsComponent } from './uploads/uploads.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: "login", component: LoginComponent, pathMatch: "full" },
+  { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: "forgotPassword", component: ForgotPasswordComponent, pathMatch: "full" },
   { path: "uploads", component: UploadsComponent, pathMatch: "full" },
   { path: "register", component: RegisterComponent, pathMatch: "full" },

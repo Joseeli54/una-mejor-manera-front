@@ -6,9 +6,10 @@ export class Actividad {
     fecha: string;
     startTime: string;
     endTime: string;
+    status: string;
 
     constructor(_id: string, nombre: string, descripcion: string, tipo: string,
-    			fecha: string, startTime: string, endTime: string) {
+    			fecha: string, startTime: string, endTime: string, status: string) {
       this._id = _id;
       this.nombre = nombre;
       this.descripcion = descripcion;
@@ -16,5 +17,6 @@ export class Actividad {
       this.fecha = fecha;
       this.startTime = startTime;
       this.endTime = endTime;
+      this.status = status;
     }
 } 

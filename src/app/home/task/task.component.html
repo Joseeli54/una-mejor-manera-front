@@ -81,6 +81,19 @@
 
           <div class="col text-justify">
             <div class="form-group">
+
+                <div class="d-flex">
+                    <p class="col-10 px-0">
+                        <b *ngIf="tarea.status == 'Hecho'" class="bg-success py-2 px-4 rounded-pill text-white"> {{tarea.status}}  </b>
+                        <b *ngIf="tarea.status == 'En progreso'" class="bg-warning py-2 px-4 rounded-pill text-white"> {{tarea.status}}  </b>
+                        <b *ngIf="tarea.status == 'Archivado'" class="bg-secondary py-2 px-4 rounded-pill text-white"> {{tarea.status}}  </b>
+                    </p>
+                    <a routerLink="/home/task" *ngIf="tarea.status !== 'Archivado'" class="text-secondary col-2" (click)="changeTarea(tarea._id, 'Archivado')">
+                        <span class="fa fa-archive fa-1x"></span>
+                        <b style="font-size: 14px" class="mx-2">Archivar</b>
+                    </a>
+                </div>
+
             	<p><b>Usuario Encargado:</b> {{nombreUsuario}} </p>
             	<p><b>Actividad Relacionada:</b> {{nombreActividad}} </p>
             	<p><b>Creado Por:</b> {{tarea.createBy}} </p>
@@ -89,15 +102,29 @@
                	{{ tarea.descripcion }}
             </div>
           </div>
-          <div style="display:flex" class="mt-4 justify-content-center" *ngIf="tarea.createBy == this.username || this.role == 'ADMIN'">
-  				<a routerLink="/home/task" (click)="editTarea(putContent, tarea._id, tarea.nombre, tarea.descripcion, tarea.idActividad, tarea.idUser)" class="mr-1">
-		            <span class="fa fa-edit fa-2x"></span>
-		            <b style="font-size: 1rem" class="mx-2">Editar</b>
-	            </a>
-  				<a routerLink="/home/task" style="color: red" (click)="deleteTarea(tarea._id)">
-	  				<span class="fa fa-trash fa-2x"></span>
-	            	<b style="font-size: 1rem" class="mx-2">Eliminar</b>
-  				</a>
+          <div class="mt-4 justify-content-center" *ngIf="tarea.createBy == this.username || this.role == 'ADMIN'">
+
+                <div class="col-md-12 text-center py-2">
+      				<a routerLink="/home/task" (click)="editTarea(putContent, tarea._id, tarea.nombre, tarea.descripcion, tarea.idActividad, tarea.idUser, tarea.status)" class="mr-1">
+    		            <span class="fa fa-edit fa-1x"></span>
+    		            <b style="font-size: 14px" class="mx-2">Editar</b>
+    	            </a>
+      				<a routerLink="/home/task" style="color: red" (click)="deleteTarea(tarea._id)">
+    	  				<span class="fa fa-trash fa-1x"></span>
+    	            	<b style="font-size: 14px" class="mx-2">Eliminar</b>
+      				</a>
+                </div>
+
+                <div class="col-md-12 text-center py-2">
+                    <a routerLink="/home/task" *ngIf="tarea.status !== 'Hecho'" class="text-success" (click)="changeTarea(tarea._id, 'Hecho')">
+                        <span class="fa fa-battery-full fa-1x"></span>
+                        <b style="font-size: 14px" class="mx-2">Completar</b>
+                    </a>
+                    <a routerLink="/home/task" *ngIf="tarea.status !== 'En progreso'" class="text-warning" (click)="changeTarea(tarea._id, 'En progreso')">
+                        <span class="fa fa-battery-quarter fa-1x"></span>
+                        <b style="font-size: 14px" class="mx-2">Marcar en progreso</b>
+                    </a>
+              </div>
   		  </div>
     </div>
 </ng-template>
@@ -109,6 +136,13 @@
 	        <li class="fa fa-plus-circle" style="font-size: 2em"></li> 
 	        <b style="font-size: 20px;" class="mx-2">Crear Tarea</b>
 	    </a>
+
+        <div class="d-flex">
+            <a routerLink='/home/task' (click)="moverTipoTarea('')" class="mx-2 my-1" style="font-size: 14px; color: gray">Todos ({{ cantidadTodos }})</a>
+            <a routerLink='/home/task' (click)="moverTipoTarea('Hecho')" class="mx-2 my-1" style="font-size: 14px; color: gray">Hechos ({{ cantidadHechos }})</a>
+            <a routerLink='/home/task' (click)="moverTipoTarea('En progreso')" class="mx-2 my-1" style="font-size: 14px; color: gray">En progreso ({{ cantidadEnProgreso }})</a>
+            <a routerLink='/home/task' (click)="moverTipoTarea('Archivado')" class="mx-2 my-1" style="font-size: 14px; color: gray">Archivados ({{ cantidadArchivado }})</a>
+        </div>
 
         <table class="table">
             <thead>
@@ -126,5 +160,7 @@
             </tr>
             </tbody>
         </table>
+
+        <button class="btn btn-secondary" (click)="masTareas()" *ngIf="tareas.length >= part" style="font-size: 14px">Mas ...</button>
     </div>
 </div>

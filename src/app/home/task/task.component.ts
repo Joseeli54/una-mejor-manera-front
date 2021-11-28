@@ -18,7 +18,7 @@ import $ from 'jquery';
 })
 export class TaskComponent implements OnInit {
 
-  	public propertyForm: FormGroup;
+  public propertyForm: FormGroup;
 	public closeResult: string;
 	public modalReference: any;
 	public modalReference2: any;
@@ -32,6 +32,7 @@ export class TaskComponent implements OnInit {
 	public tareas : Tarea[] = []
 	public actividades : Actividad[] = []
 	public usuarios : Usuario[] = []
+	public part : any = 5;
 
 	public nombrePut : any;
 	public descripcionPut : any;
@@ -40,6 +41,14 @@ export class TaskComponent implements OnInit {
 	public nombreActividad : any;
 	public idActividadPut : any;
 	public idPut : any;
+	public status : any = [{'nombre' : 'En Progreso'}, {'nombre' : 'Hecho'}, {'nombre' : 'Archivado'}]
+	public estado: any;
+	public getStatusGlobal : any = '';
+
+	public cantidadTodos : number;
+	public cantidadHechos : number;
+	public cantidadEnProgreso : number;
+	public cantidadArchivado : number;
 
 	constructor(private modalService: NgbModal, private modalService2: NgbModal, private _formBuilder: FormBuilder, 
 				  private service: UsersService, private service2: UsersService, private router: Router) {}
@@ -65,7 +74,7 @@ export class TaskComponent implements OnInit {
 	}
 
 	editTarea(content, id : any, nombre : any, descripcion : any, 
-				idActividad : any, idUser : any){
+				idActividad : any, idUser : any, status: any){
 
 		this.modalReference2.close();
 
@@ -77,12 +86,14 @@ export class TaskComponent implements OnInit {
 		this.descripcionPut = descripcion;
 		this.idUserPut = idUser;
 		this.idActividadPut = idActividad;
+		this.estado = status;
 
 		this.modalReference = this.modalService.open(content, { size: 'lg', centered: true});
 
 		this.modalReference.result.then((result) => {
 		  this.closeResult = `Closed with: ${result}`;
 		}, (reason) => {
+			this.limpiarInputDescription();
 		  this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
 		});
 
@@ -98,12 +109,35 @@ export class TaskComponent implements OnInit {
 		}
 	}
 
-	getTarea(){
-		this.service.getUrl('tareas')
+	getTarea(status: string = ''){
+
+		this.getStatusGlobal = status;
+
+		let data = {
+			"status": status
+		};
+
+		this.service.postUrl('tareas/part/{cont}', data, [this.part])
 		.then(data => { 
 			this.tareas = data;
+			this.getCantidadPorTarea();
 		})
 		.catch(data =>{});
+
+	}
+
+	public getCantidadPorTarea(){
+			this.service.getUrl('tareas/cantidadPorStatus')
+	    .then(data => { 
+	    	console.log(data);
+
+	    	this.cantidadTodos = data.todos;
+	    	this.cantidadHechos = data.cantidadHechos;
+	    	this.cantidadEnProgreso = data.cantidadEnProgreso;
+	    	this.cantidadArchivado = data.cantidadArchived;
+
+	    })
+	    .catch(data =>{});
 	}
 
 	getActividad(){
@@ -146,7 +180,7 @@ export class TaskComponent implements OnInit {
 	private getDateToday(): string{
 
 		var hoy = new Date();
-		var fecha = hoy.getDate() + '-' + ( hoy.getMonth() + 1 ) + '-' + hoy.getFullYear();
+		var fecha = hoy.getFullYear() + '-' + ( hoy.getMonth() + 1 ) + '-' + hoy.getDate();
 
 		if(hoy.getMinutes() < 10){
 			var hora = hoy.getHours() + ':0' + hoy.getMinutes() + ':' + hoy.getSeconds();
@@ -161,6 +195,13 @@ export class TaskComponent implements OnInit {
 		return now;
 	}
 
+	public limpiarInputDescription(){
+  	this.propertyForm.get('Nombre').setValue("");
+  	this.propertyForm.get('Descripcion').setValue("");
+  	this.propertyForm.get('idUser').setValue("");
+  	this.propertyForm.get('idActividad').setValue("");
+  }
+
 	setTarea(){
 
 		let time = this.getDateToday();
@@ -171,7 +212,8 @@ export class TaskComponent implements OnInit {
 			"idUser": this.propertyForm.get('idUser').value,
 			"idActividad": this.propertyForm.get('idActividad').value,
 			"createBy" : this.username,
-			"time" : time
+			"time" : time,
+			"status": "En progreso"
 		};
 
 		$('#button_create').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
@@ -182,7 +224,8 @@ export class TaskComponent implements OnInit {
 			console.log(response)
 			if(response._id !== undefined){
 				this.modalReference.close();
-				this.getTarea();
+				this.getTarea(this.getStatusGlobal);
+				this.limpiarInputDescription();
 			}
     })
     .catch(data =>{
@@ -200,7 +243,8 @@ export class TaskComponent implements OnInit {
 			"descripcion": this.descripcionPut,
 			"idUser": this.idUserPut,
 			"idActividad": this.idActividadPut,
-			"time" : time
+			"time" : time,
+			"status": this.estado
 		};
 
 		$('#button_change').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
@@ -210,7 +254,8 @@ export class TaskComponent implements OnInit {
 			$('#button_change').html("Cambiar");
 			if(response._id !== undefined){
 				this.modalReference.close();
-				this.getTarea();
+				this.getTarea(this.getStatusGlobal);
+				this.limpiarInputDescription();
 			}
 	    })
 	    .catch(data =>{
@@ -219,11 +264,25 @@ export class TaskComponent implements OnInit {
 	    });
 	}
 
+	changeTarea(id, status){
+
+		let data = {
+			"status": status
+		};
+
+		this.service.putUrl('tareas/status/{id}', data, [id])
+		.then(data => { 
+	    	this.getTarea(this.getStatusGlobal); 
+	    	this.modalReference2.close();
+	    })
+	    .catch(data =>{});
+	}
+
 	deleteTarea(id){
 
 		this.service.deleteUrl('tareas/{id}', [id])
 		.then(data => { 
-	    	this.getTarea(); 
+	    	this.getTarea(this.getStatusGlobal); 
 	    	this.modalReference2.close();
 	    })
 	    .catch(data =>{});
@@ -255,6 +314,16 @@ export class TaskComponent implements OnInit {
 		}, (reason) => {
 		  this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
 		});
+	}
+
+	public moverTipoTarea(status: string = ''){
+		this.part = 5;
+		this.getTarea(status);
+	}
+
+	public masTareas(){
+		this.part = this.part + 5;
+		this.getTarea(this.getStatusGlobal);
 	}
 
 }

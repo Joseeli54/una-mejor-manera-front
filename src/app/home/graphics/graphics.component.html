@@ -1,0 +1,140 @@
+<div class="container mt-3 pt-3">
+	<div class="col-12 px-0">
+
+		<div class="accordion" id="accordionExample">
+		  <div class="card">
+		    <div class="card-header" id="headingOne">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link btn-block text-left collapsed text-decoration-none text-secondary" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		          <b> Numero de usuarios por región</b>
+		        </button>
+		      </h2>
+		    </div>
+
+		    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+		      <div class="card-body">
+		        	<ngx-charts-bar-vertical
+					  (window:resize)="onResize($event)"
+					  [view]="view"
+					  [scheme]="colorScheme"
+					  [results]="single"
+					  [gradient]="gradient"
+					  [xAxis]="showXAxis"
+					  [yAxis]="showYAxis"
+					  [legend]="showLegend"
+					  [showXAxisLabel]="showXAxisLabel"
+					  [showYAxisLabel]="showYAxisLabel"
+					  [xAxisLabel]="xAxisLabel"
+					  [yAxisLabel]="yAxisLabel"
+					  (select)="onSelect($event)">
+					</ngx-charts-bar-vertical>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card">
+		    <div class="card-header" id="headingTwo">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link btn-block text-left collapsed text-decoration-none text-secondary" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		         <b> Numero de tareas por status </b>
+		        </button>
+		      </h2>
+		    </div>
+		    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+		      <div class="card-body">
+		       		<ngx-charts-pie-chart
+					  [view]="view2"
+					  [scheme]="colorScheme"
+					  [results]="single2"
+					  [gradient]="gradient2"
+					  [legend]="showLegend2"
+					  [legendPosition]="legendPosition"
+					  [labels]="showLabels"
+					  [doughnut]="isDoughnut"
+					  (select)="onSelect($event)"
+					  (activate)="onActivate($event)"
+					  (deactivate)="onDeactivate($event)"
+					  >
+					</ngx-charts-pie-chart>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card">
+			    <div class="card-header" id="headingThree">
+			      <h2 class="mb-0">
+			        <button class="btn btn-link btn-block text-left collapsed text-decoration-none text-secondary" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+			         <b> Numero de actividades por status </b>
+			        </button>
+			      </h2>
+			    </div>
+			    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+			      <div class="card-body">
+					<ngx-charts-pie-chart
+					  [view]="view3"
+					  [scheme]="colorScheme"
+					  [results]="single3"
+					  [gradient]="gradient3"
+					  [legend]="showLegend3"
+					  [legendPosition]="legendPosition"
+					  [labels]="showLabels"
+					  [doughnut]="isDoughnut"
+					  (select)="onSelect($event)"
+					  (activate)="onActivate($event)"
+					  (deactivate)="onDeactivate($event)"
+					  >
+					</ngx-charts-pie-chart>
+			      </div>
+			    </div>
+		  </div>
+		  <div class="card">
+			    <div class="card-header" id="headingFour">
+			      <h2 class="mb-0">
+			        <button class="btn btn-link btn-block text-left collapsed text-decoration-none text-secondary" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+			         <b> Usuarios con más tareas </b>
+			        </button>
+			      </h2>
+			    </div>
+			    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+			        <table class="table">
+			            <thead>
+			            <tr>
+			                <th style="width: 25%" style="font-size: 14px; text-align:center">Nombre de Usuario</th>
+			                <th style="width: 10%" style="font-size: 14px; text-align:center">Cantidad</th>
+			            </tr>
+			            </thead>
+			            <tbody>
+			            <tr *ngFor="let user of single4; let indice=index" class="bloque-user">
+				                <td style="font-size: 14px; text-align:center">{{user.name}}</td>
+				                <td style="font-size: 14px; text-align:center">{{user.value}}</td>
+			            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+		  </div>
+		  <div class="card">
+			    <div class="card-header" id="headingFive">
+			      <h2 class="mb-0">
+			        <button class="btn btn-link btn-block text-left collapsed text-decoration-none text-secondary" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			         <b> Actividades con más tareas </b>
+			        </button>
+			      </h2>
+			    </div>
+			    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+			        <table class="table">
+			            <thead>
+			            <tr>
+			                <th style="width: 25%" style="font-size: 14px; text-align:center">Nombre de Actividad</th>
+			                <th style="width: 10%" style="font-size: 14px; text-align:center">Cantidad</th>
+			            </tr>
+			            </thead>
+			            <tbody>
+			            <tr *ngFor="let single of single5; let indice=index" class="bloque-activities">
+				                <td style="font-size: 14px; text-align:center">{{single.name}}</td>
+				                <td style="font-size: 14px; text-align:center">{{single.value}}</td>
+			            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+		  </div>
+		</div>
+	</div>
+</div>

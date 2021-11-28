@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { UsersService } from '../../users/users.service';
 import { Actividad } from "../../classes/actividad";
 import { isNullOrUndefined } from 'util';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import $ from 'jquery';
 
 @Component({
@@ -23,6 +23,7 @@ export class ActivityComponent implements OnInit {
 	public role : any;
 	public activity : any;
 	public actividades : Actividad[] = []
+	public part : any = 5;
 
 	public nombrePut : any;
 	public descripcionPut : any;
@@ -31,6 +32,14 @@ export class ActivityComponent implements OnInit {
 	public startTimePut : any;
 	public endTimePut : any;
 	public idPut : any;
+	public status : any = [{'nombre' : 'En Progreso'}, {'nombre' : 'Hecho'}, {'nombre' : 'Archivado'}]
+	public estado: any;
+	public getStatusGlobal : any = '';
+
+	public cantidadTodos : number;
+	public cantidadHechos : number;
+	public cantidadEnProgreso : number;
+	public cantidadArchivado : number;
 
 
 	constructor(private modalService: NgbModal, private modalService2: NgbModal, private _formBuilder: FormBuilder, 
@@ -58,7 +67,7 @@ export class ActivityComponent implements OnInit {
 	}
 
 	editActivity(content, id : any, nombre : any, descripcion : any, 
-				tipo : any, fecha : any, startTime : any, endTime : any){
+				tipo : any, fecha : any, startTime : any, endTime : any, status: any){
 
 		this.modalReference2.close();
 
@@ -69,12 +78,14 @@ export class ActivityComponent implements OnInit {
 		this.fechaPut = fecha;
 		this.startTimePut = startTime;
 		this.endTimePut = endTime;
+		this.estado = status;
 
 		this.modalReference = this.modalService.open(content, { size: 'lg', centered: true});
 
 		this.modalReference.result.then((result) => {
 		  this.closeResult = `Closed with: ${result}`;
 		}, (reason) => {
+			this.limpiarInputDescription();
 		  this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
 		});
 
@@ -93,7 +104,7 @@ export class ActivityComponent implements OnInit {
 	private getDateToday(): string{
 
 		var hoy = new Date();
-		var fecha = hoy.getDate() + '-' + ( hoy.getMonth() + 1 ) + '-' + hoy.getFullYear();
+		var fecha = hoy.getFullYear() + '-' + ( hoy.getMonth() + 1 ) + '-' + hoy.getDate();
 
 		if(hoy.getMinutes() < 10){
 			var hora = hoy.getHours() + ':0' + hoy.getMinutes() + ':' + hoy.getSeconds();
@@ -108,17 +119,51 @@ export class ActivityComponent implements OnInit {
 		return now;
 	}
 
-	getActividad(){
-		this.service.getUrl('actividades')
+	getActividad(status: string = ''){
+
+		this.getStatusGlobal = status;
+
+		let data = {
+			"status": status
+		};
+
+		this.service.postUrl('actividades/part/{cont}', data, [this.part])
 		.then(data => { 
+
+			console.log(data);
 			this.actividades = data;
 
 			for (var i = 0; i < this.actividades.length; ++i) {
 				this.actividades[i].fecha = this.actividades[i].fecha.split("T")[0];
 			}
+
+			this.getCantidadPorActividades();
 		})
 		.catch(data =>{});
 	}
+
+	public getCantidadPorActividades(){
+			this.service.getUrl('actividades/cantidadPorStatus')
+	    .then(data => { 
+	    	console.log(data);
+
+	    	this.cantidadTodos = data.todos;
+	    	this.cantidadHechos = data.cantidadHechos;
+	    	this.cantidadEnProgreso = data.cantidadEnProgreso;
+	    	this.cantidadArchivado = data.cantidadArchived;
+
+	    })
+	    .catch(data =>{});
+	}
+
+	public limpiarInputDescription(){
+  	this.propertyForm.get('Nombre').setValue("");
+  	this.propertyForm.get('Descripcion').setValue("");
+  	this.propertyForm.get('Tipo').setValue("");
+  	this.propertyForm.get('Fecha').setValue("");
+  	this.propertyForm.get('StartTime').setValue("");
+  	this.propertyForm.get('EndTime').setValue("");
+  }
 
 	setActividad(){
 
@@ -132,7 +177,8 @@ export class ActivityComponent implements OnInit {
 			"startTime": this.propertyForm.get('StartTime').value,
 			"endTime": this.propertyForm.get('EndTime').value,
 			"createBy": this.username,
-			"time": time
+			"time": time,
+			"status": "En progreso"
 		};
 
 		$('#button_agendar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
@@ -144,7 +190,8 @@ export class ActivityComponent implements OnInit {
 
 				if(response._id !== undefined){
 					this.modalReference.close();
-					this.getActividad();
+					this.getActividad(this.getStatusGlobal);
+					this.limpiarInputDescription();
 				}
 
 	    })
@@ -165,7 +212,8 @@ export class ActivityComponent implements OnInit {
 			"fecha": this.fechaPut,
 			"startTime": this.startTimePut,
 			"endTime": this.endTimePut,
-			"time": time
+			"time": time,
+			"status": this.estado
 		};
 
 		$('#button_cambiar').html("<li class='fa fa-spinner fa-spin fa-1x'> </li>");
@@ -175,7 +223,8 @@ export class ActivityComponent implements OnInit {
 				$('#button_cambiar').html("Cambiar");
 				if(response._id !== undefined){
 					this.modalReference.close();
-					this.getActividad();
+					this.getActividad(this.getStatusGlobal);
+					this.limpiarInputDescription();
 				}
 	    })
 	    .catch(data =>{
@@ -185,11 +234,25 @@ export class ActivityComponent implements OnInit {
 	    });
 	}
 
+	changeActividad(id, status){
+
+		let data = {
+			"status": status
+		};
+
+		this.service.putUrl('actividades/status/{id}', data, [id])
+		.then(data => { 
+	    	this.getActividad(this.getStatusGlobal); 
+	    	this.modalReference2.close();
+	    })
+	    .catch(data =>{});
+	}
+
 	deleteActividad(id){
 
 		this.service.deleteUrl('actividades/{id}', [id])
 		.then(data => { 
-	    	this.getActividad(); 
+	    	this.getActividad(this.getStatusGlobal); 
 	    	this.modalReference2.close();
 	    })
 	    .catch(data =>{});
@@ -216,6 +279,16 @@ export class ActivityComponent implements OnInit {
 		}, (reason) => {
 		  this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
 		});
+	}
+
+	public moverTipoActividad(status: string = ''){
+		this.part = 5;
+		this.getActividad(status);
+	}
+
+	public masActividades(){
+		this.part = this.part + 5;
+		this.getActividad(this.getStatusGlobal);
 	}
 
 }

@@ -138,7 +138,7 @@ export class PostComponent implements OnInit {
 
         console.warn('Size in bytes is now:',  this.imageCompress.byteCount(image)/(1024*1024));
         
-        this.imageCompress.compressFile(image, orientation, 50, 50).then(
+        this.imageCompress.compressFile(image, orientation, 70, 70).then(
         result => {
             this.urlPreview = result;
             

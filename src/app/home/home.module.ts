@@ -11,9 +11,11 @@ import { ActivityComponent } from './activity/activity.component';
 import { TaskComponent } from './task/task.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { GraphicsComponent } from './graphics/graphics.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
-  declarations: [HomeComponent, PostComponent, ActivityComponent, TaskComponent, ProfileComponent],
+  declarations: [HomeComponent, PostComponent, ActivityComponent, TaskComponent, ProfileComponent, GraphicsComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,7 +23,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     HomeRoutingModule,
     HttpClientModule,
     NgbModule,
-    NgSelectModule
+    NgSelectModule,
+    NgxChartsModule
   ]
 })
 export class HomeModule { }
