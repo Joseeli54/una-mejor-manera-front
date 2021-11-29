@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
     };
 
     Swal.fire(config).then(result => {
-      location.replace('home/post');
+      this.router.navigate(['/home/post'], { replaceUrl: true });
     });
   }
 

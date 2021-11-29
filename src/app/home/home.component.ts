@@ -22,12 +22,9 @@ export class HomeComponent implements OnInit {
 
 	constructor(private router: Router, public locationWindow: PlatformLocation) {
 
-		  		locationWindow.onPopState(() => {
-							  var Backlen=history.length;   
-							  console.log(Backlen)
-								history.go(-Backlen); // Return at the beginning
-								location.replace('home/post');
-			    });
+		  		// locationWindow.onPopState(() => {
+						// 		location.replace('home/post');
+			   //  });
 	}
 
 	ngOnInit() {
