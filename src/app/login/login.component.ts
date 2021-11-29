@@ -19,14 +19,13 @@ export class LoginComponent implements OnInit {
   idUser: string;
   password: string;
   private localStorageService;
-  private currentSession : Session = null;
+
 
   constructor(private router: Router, 
               private route: ActivatedRoute,
               private _formBuilder: FormBuilder,
               public userService: UsersService) {
     this.localStorageService = localStorage;
-    this.currentSession = this.loadSessionData();
   }
 
   ngOnInit() {
@@ -34,7 +33,7 @@ export class LoginComponent implements OnInit {
       var rol = localStorage.getItem('role');
       var email = localStorage.getItem('email');
       if (!isNullOrUndefined(rol) && !isNullOrUndefined(email)) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home/post']);
       }
   }
 
@@ -88,7 +87,7 @@ export class LoginComponent implements OnInit {
     };
 
     Swal.fire(config).then(result => {
-      this.router.navigateByUrl('/home');
+      location.replace('home/post');
     });
   }
 
@@ -101,44 +100,6 @@ export class LoginComponent implements OnInit {
 
     Swal.fire(config).then(result => {
     });
-  }
-
-  setCurrentSession(session: Session): void {
-    this.currentSession = session;
-    this.localStorageService.setItem('currentUser', JSON.stringify(session));
-  }
-
-  loadSessionData(): Session{
-    var sessionStr = this.localStorageService.getItem('currentUser');
-    return (sessionStr) ? <Session> JSON.parse(sessionStr) : null;
-  }
-
-  getCurrentSession(): Session {
-    return this.currentSession;
-  }
-
-  removeCurrentSession(): void {
-    this.localStorageService.removeItem('currentUser');
-    this.currentSession = null;
-  }
-
-  getCurrentUser(): Usuario {
-    var session: Session = this.getCurrentSession();
-    return (session && session.user) ? session.user : null;
-  };
-
-  isAuthenticated(): boolean {
-    return (this.getCurrentToken() != null) ? true : false;
-  };
-
-  getCurrentToken(): string {
-    var session = this.getCurrentSession();
-    return (session && session.token) ? session.token : null;
-  };
-
-  logout(): void{
-    this.removeCurrentSession();
-    this.router.navigate(['/login']);
   }
 
 }

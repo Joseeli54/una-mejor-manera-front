@@ -1,6 +1,9 @@
 import { Component, OnInit, ElementRef, AfterViewInit, Renderer2} from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlertOptions } from 'sweetalert2';
+import Swal from 'sweetalert2';
+import { PlatformLocation } from '@angular/common';
 import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
 import $ from 'jquery';
@@ -17,7 +20,15 @@ export class HomeComponent implements OnInit {
 	public bLogger = false;
 	public role : any;
 
-	constructor(private router: Router) {}
+	constructor(private router: Router, public locationWindow: PlatformLocation) {
+
+		  		locationWindow.onPopState(() => {
+							  var Backlen=history.length;   
+							  console.log(Backlen)
+								history.go(-Backlen); // Return at the beginning
+								location.replace('home/post');
+			    });
+	}
 
 	ngOnInit() {
 	    
@@ -29,7 +40,7 @@ export class HomeComponent implements OnInit {
 	    if (!isNullOrUndefined(rol) && !isNullOrUndefined(email)) {
 	      	this.bLogger = true;
 	      	this.username = localStorage.getItem('username');
-	      	this.router.navigateByUrl('home/post');
+	      	//this.router.navigateByUrl('home/post');
 	    }else{
 	    	this.router.navigateByUrl('/');
 	    }

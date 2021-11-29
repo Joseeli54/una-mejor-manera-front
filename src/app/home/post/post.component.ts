@@ -9,6 +9,9 @@ import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
 import { HttpClient , HttpHeaders} from  '@angular/common/http';
 import { NgxImageCompressService } from 'ngx-image-compress';
+import { SweetAlertOptions } from 'sweetalert2';
+import Swal from 'sweetalert2';
+import { PlatformLocation } from '@angular/common';
 import $ from 'jquery';
 
 @Component({
@@ -34,8 +37,8 @@ export class PostComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private _formBuilder: FormBuilder, 
   			  private service: UsersService, private router: Router, private  httpClient:  HttpClient,
-  			  private imageCompress: NgxImageCompressService) {
-	}
+  			  private imageCompress: NgxImageCompressService, public locationWindow: PlatformLocation) {
+  }
 
 	ngOnInit() {
 

@@ -31,6 +31,7 @@
     "chart.js": "^3.6.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
+    "nativescript-angular": "^8.0.3-rc-2019-07-26-144033-01",
     "ngx-image-compress": "^11.0.3",
     "popper.js": "^1.16.1",
     "rxjs": "~6.4.0",
