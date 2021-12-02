@@ -199,7 +199,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  private GotoFood(){
+  public GotoFood(){
     this.router.navigate(['/'], { replaceUrl: true });
   }
   
