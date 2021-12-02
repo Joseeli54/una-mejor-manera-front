@@ -198,6 +198,10 @@ export class RegisterComponent implements OnInit {
     Swal.fire(config).then(result => {
     });
   }
+
+  private GotoFood(){
+    this.router.navigate(['/'], { replaceUrl: true });
+  }
   
   private errorOcurred(message) {
     let config: SweetAlertOptions = {
