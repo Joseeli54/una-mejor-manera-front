@@ -56,7 +56,7 @@ export class ForgotPasswordComponent implements OnInit {
     };
 
     Swal.fire(config).then(result => {
-      this.router.navigateByUrl('/login');
+      this.router.navigate(['/login'], { replaceUrl: true });
     });
   }
 

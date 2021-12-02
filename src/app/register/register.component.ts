@@ -141,7 +141,7 @@ export class RegisterComponent implements OnInit {
 
                    this.bSend = true;
                    this.messageSuccessfully();
-                   this.router.navigate(['/login']);
+                   this.router.navigate(['/login'], { replaceUrl: true });
               })
               .catch(data =>{
                    this.errorOcurred(data.error.err.message)
@@ -177,7 +177,7 @@ export class RegisterComponent implements OnInit {
 
                    this.bSend = true;
                    this.messageSuccessfully();
-                   this.router.navigate(['/login']);
+                   this.router.navigate(['/login'], { replaceUrl: true });
               })
               .catch(data =>{
                    $('#register_button').html("Registrarse");

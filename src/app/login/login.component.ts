@@ -32,8 +32,9 @@ export class LoginComponent implements OnInit {
 
       var rol = localStorage.getItem('role');
       var email = localStorage.getItem('email');
+
       if (!isNullOrUndefined(rol) && !isNullOrUndefined(email)) {
-        this.router.navigate(['/home/post']);
+        this.router.navigate(['/home/post'], { replaceUrl: true });
       }
   }
 

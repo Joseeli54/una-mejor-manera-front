@@ -5,9 +5,11 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { UploadsComponent } from './uploads/uploads.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { FoodComponent } from './food/food.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent, pathMatch: 'full' },
+  { path: '', component: FoodComponent, pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: "forgotPassword", component: ForgotPasswordComponent, pathMatch: "full" },
   { path: "uploads", component: UploadsComponent, pathMatch: "full" },
   { path: "register", component: RegisterComponent, pathMatch: "full" },

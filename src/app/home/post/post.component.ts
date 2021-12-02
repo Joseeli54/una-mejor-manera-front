@@ -42,10 +42,10 @@ export class PostComponent implements OnInit {
 
 	ngOnInit() {
 
-		this.username = localStorage.getItem('username');
-		this.role = localStorage.getItem('role');
+	  this.username = localStorage.getItem('username');
+	  this.role = localStorage.getItem('role');
 			
-		this.createForm();
+	  this.createForm();
 	  this.getPublicacion();
 
 	  const onScroll = () => {

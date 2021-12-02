@@ -3,7 +3,6 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlertOptions } from 'sweetalert2';
 import Swal from 'sweetalert2';
-import { PlatformLocation } from '@angular/common';
 import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
 import $ from 'jquery';
@@ -20,12 +19,7 @@ export class HomeComponent implements OnInit {
 	public bLogger = false;
 	public role : any;
 
-	constructor(private router: Router, public locationWindow: PlatformLocation) {
-
-		  		// locationWindow.onPopState(() => {
-						// 		location.replace('home/post');
-			   //  });
-	}
+	constructor(private router: Router) {}
 
 	ngOnInit() {
 	    
@@ -37,22 +31,21 @@ export class HomeComponent implements OnInit {
 	    if (!isNullOrUndefined(rol) && !isNullOrUndefined(email)) {
 	      	this.bLogger = true;
 	      	this.username = localStorage.getItem('username');
-	      	//this.router.navigateByUrl('home/post');
 	    }else{
-	    	this.router.navigateByUrl('/');
+	    	this.router.navigate(['/'], { replaceUrl: true });
 	    }
 
 	}
 
 	public logout(){
 		localStorage.removeItem('token');
-  	localStorage.removeItem('email');
-  	localStorage.removeItem('role');
-  	localStorage.removeItem('username');
-  	localStorage.removeItem('avatar');
-  	localStorage.setItem('isLoggedIn', "false");  
+		localStorage.removeItem('email');
+		localStorage.removeItem('role');
+		localStorage.removeItem('username');
+		localStorage.removeItem('avatar');
+		localStorage.setItem('isLoggedIn', "false");  
 
-    this.router.navigateByUrl('/');
+		this.router.navigate(['/'], { replaceUrl: true });
 	}
 
 	public Gotoprofile(){
@@ -60,11 +53,27 @@ export class HomeComponent implements OnInit {
 		var URL = '/home/myprofile/'+localStorage.getItem('username');
 
 		$('#navbarNav').removeClass('show');
-		this.router.navigateByUrl(URL);
+		this.router.navigate([URL], { replaceUrl: true });
 	}
 
-	public collapseHide(){
-			$('#navbarNav').removeClass('show');
+	public Gotopost(){
+		$('#navbarNav').removeClass('show');
+		this.router.navigate(['/home/post'], { replaceUrl: true });
+	}
+
+	public Gotoactivities(){
+		$('#navbarNav').removeClass('show');
+		this.router.navigate(['/home/activities'], { replaceUrl: true });
+	}
+
+	public Gototasks(){
+		$('#navbarNav').removeClass('show');
+		this.router.navigate(['/home/task'], { replaceUrl: true });
+	}
+
+	public Gotostatistics(){
+		$('#navbarNav').removeClass('show');
+		this.router.navigate(['/home/graphics'], { replaceUrl: true });
 	}
 
 }

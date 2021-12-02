@@ -17,6 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxImageCompressService } from 'ngx-image-compress';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { FoodComponent } from './food/food.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { environment } from '../environments/environment';
     LoginComponent,
     RegisterComponent,
     UploadsComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    FoodComponent
   ],
   imports: [
     BrowserModule,
