@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
 		var URL = '/home/myprofile/'+localStorage.getItem('username');
 
 		$('#navbarNav').removeClass('show');
-		this.router.navigate([URL], { replaceUrl: true });
+		this.router.navigate([URL]);
 	}
 
 	public Gotopost(){
@@ -63,17 +63,17 @@ export class HomeComponent implements OnInit {
 
 	public Gotoactivities(){
 		$('#navbarNav').removeClass('show');
-		this.router.navigate(['/home/activities'], { replaceUrl: true });
+		this.router.navigate(['/home/activities']);
 	}
 
 	public Gototasks(){
 		$('#navbarNav').removeClass('show');
-		this.router.navigate(['/home/task'], { replaceUrl: true });
+		this.router.navigate(['/home/task']);
 	}
 
 	public Gotostatistics(){
 		$('#navbarNav').removeClass('show');
-		this.router.navigate(['/home/graphics'], { replaceUrl: true });
+		this.router.navigate(['/home/graphics']);
 	}
 
 }
