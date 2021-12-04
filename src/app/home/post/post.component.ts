@@ -36,7 +36,8 @@ export class PostComponent implements OnInit {
   public urlPreview : any = '';
 
   constructor(private modalService: NgbModal, private _formBuilder: FormBuilder, 
-  			  private service: UsersService, private router: Router, private  httpClient:  HttpClient,
+  			  private service: UsersService, private service2: UsersService, 
+			  private router: Router, private  httpClient:  HttpClient,
   			  private imageCompress: NgxImageCompressService, public locationWindow: PlatformLocation) {
   }
 
@@ -44,6 +45,8 @@ export class PostComponent implements OnInit {
 
 	  this.username = localStorage.getItem('username');
 	  this.role = localStorage.getItem('role');
+
+	  console.log("Probando ando con Elias!");
 			
 	  this.createForm();
 	  this.getPublicacion();
@@ -236,6 +239,43 @@ export class PostComponent implements OnInit {
 	    .catch(data =>{});
 	}
 
+	public pushNotification(){
+		let data = {
+			"descripcion": this.propertyForm.get('Comentarios').value,
+			"username": localStorage.getItem('username'),
+			"avatar" : localStorage.getItem('avatar'),
+			"endpoint" : this.getCookie('endpoint'),
+			"p256dh" : this.getCookie('p256dh'),
+			"auth" : this.getCookie('auth')
+		};
+
+		console.log(data);
+
+		this.service2.postUrl('sendToken', data)
+		.then(response => {
+			console.log("Notificacion enviada")
+		})
+		.catch(data =>{
+			console.log(data.error)
+		});
+	}
+
+	public getCookie(cname) {
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);
+		let ca = decodedCookie.split(';');
+		for(let i = 0; i <ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+
 	public setPublicaciones(){
 
 		let time = this.getDateToday();
@@ -265,12 +305,14 @@ export class PostComponent implements OnInit {
 						this.service.postUrl('publicaciones', data)
 						.then(response => {
 							console.log(response._id)
-									if(response._id !== undefined){
-										this.modalReference.close();
-										this.getPublicacion();
-										this.clickEliminarImagen();
-	  								this.limpiarInputDescription();
-									}
+							if(response._id !== undefined){
+								this.modalReference.close();
+								this.getPublicacion();
+
+								this.pushNotification();
+								this.clickEliminarImagen();
+								this.limpiarInputDescription();
+							}
 					    })
 					    .catch(data =>{
 					        console.log(data.error)
@@ -292,6 +334,7 @@ export class PostComponent implements OnInit {
 						if(response._id !== undefined){
 							this.modalReference.close();
 							this.getPublicacion();
+							this.pushNotification();
 							this.limpiarInputDescription();
 						}
 		    })

@@ -1,13 +1,15 @@
 {
   "name": "project-service",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --prod",
+    "start-pwa": "ng build --prod && http-server -p 8080 -c-1 dist/project-service"
   },
   "private": true,
   "dependencies": {
@@ -26,6 +28,7 @@
     "@ng-select/ng-select": "~3.7.3",
     "@sweetalert2/ngx-sweetalert2": "^5.0.2",
     "@swimlane/ngx-charts": "^10.1.0",
+    "angular-http-server": "^1.10.0",
     "angular-in-memory-web-api": "^0.11.0",
     "bootstrap": "^4.6.0",
     "chart.js": "^3.6.0",
