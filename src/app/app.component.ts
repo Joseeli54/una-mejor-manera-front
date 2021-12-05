@@ -23,28 +23,32 @@ export class AppComponent {
   }
 
   subscribeToNotifications(): any {
-    this.swPush.requestSubscription({
-      serverPublicKey: this.VAPID_PUBLIC_KEY
-    }).then( sub => {
-      const token = JSON.parse(JSON.stringify(sub));
 
-      this.setCookie('endpoint', token.endpoint, 365);
-      this.setCookie('p256dh', token.keys.p256dh, 365);
-      this.setCookie('auth', token.keys.auth, 365);
+    if(this.getCookie('endpoint') == '' || 
+       this.getCookie('p256dh') == '' || 
+       this.getCookie('auth') == ''){
 
-      console.log('Informacion guardada!');
+        this.swPush.requestSubscription({
+          serverPublicKey: this.VAPID_PUBLIC_KEY
+        }).then( sub => {
+          const token = JSON.parse(JSON.stringify(sub));
+          
+          let data = {
+            "token" : token
+          }
+            
+          this.service.postUrl('saveToken', data).then(response => {
+            this.setCookie('endpoint', token.endpoint, 365);
+            this.setCookie('p256dh', token.keys.p256dh, 365);
+            this.setCookie('auth', token.keys.auth, 365);
+            console.log(response);
+          }).catch(err => {
+            console.log(err)
+          });
 
-      let data = {
-        "token" : token
-      }
-        
-      this.service.postUrl('saveToken', data).then(response => {
-        console.log(response);
-      }).catch(err => {
-        console.log(err)
-      });
+        }).catch(err => console.error('UPS :(', err));
 
-    }).catch(err => console.error('UPS :(', err));
+    }
   }
 
   public setCookie(cname, cvalue, exdays) {
