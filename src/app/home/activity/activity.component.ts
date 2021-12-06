@@ -43,7 +43,7 @@ export class ActivityComponent implements OnInit {
 
 
 	constructor(private modalService: NgbModal, private modalService2: NgbModal, private _formBuilder: FormBuilder, 
-				  private service: UsersService, private router: Router) {}
+				  private service: UsersService, private service2: UsersService, private router: Router) {}
 
 	ngOnInit() {
 
@@ -157,13 +157,54 @@ export class ActivityComponent implements OnInit {
 	}
 
 	public limpiarInputDescription(){
-  	this.propertyForm.get('Nombre').setValue("");
-  	this.propertyForm.get('Descripcion').setValue("");
-  	this.propertyForm.get('Tipo').setValue("");
-  	this.propertyForm.get('Fecha').setValue("");
-  	this.propertyForm.get('StartTime').setValue("");
-  	this.propertyForm.get('EndTime').setValue("");
-  }
+		this.propertyForm.get('Nombre').setValue("");
+		this.propertyForm.get('Descripcion').setValue("");
+		this.propertyForm.get('Tipo').setValue("");
+		this.propertyForm.get('Fecha').setValue("");
+		this.propertyForm.get('StartTime').setValue("");
+		this.propertyForm.get('EndTime').setValue("");
+	}
+
+  	public pushNotification(){
+
+		var descripcion = 'Ha creado una actividad llamada ' + 
+						  this.propertyForm.get('Nombre').value;
+
+		let data = {
+			"descripcion": descripcion,
+			"username": localStorage.getItem('username'),
+			"avatar" : localStorage.getItem('avatar'),
+			"endpoint" : this.getCookie('endpoint'),
+			"p256dh" : this.getCookie('p256dh'),
+			"auth" : this.getCookie('auth')
+		};
+
+		console.log(data);
+
+		this.service2.postUrl('tokens/pushNotification', data)
+		.then(response => {
+			console.log("Notificacion enviada")
+		})
+		.catch(data =>{
+			console.log(data.error)
+		});
+	}
+
+	public getCookie(cname) {
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);
+		let ca = decodedCookie.split(';');
+		for(let i = 0; i <ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
 
 	setActividad(){
 
@@ -191,6 +232,8 @@ export class ActivityComponent implements OnInit {
 				if(response._id !== undefined){
 					this.modalReference.close();
 					this.getActividad(this.getStatusGlobal);
+
+					this.pushNotification();
 					this.limpiarInputDescription();
 				}
 

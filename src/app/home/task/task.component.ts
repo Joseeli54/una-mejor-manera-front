@@ -51,7 +51,7 @@ export class TaskComponent implements OnInit {
 	public cantidadArchivado : number;
 
 	constructor(private modalService: NgbModal, private modalService2: NgbModal, private _formBuilder: FormBuilder, 
-				  private service: UsersService, private service2: UsersService, private router: Router) {}
+				  private service: UsersService, private service2: UsersService, private service3: UsersService, private router: Router) {}
 
 	ngOnInit() {
 		this.username = localStorage.getItem('username');
@@ -202,6 +202,47 @@ export class TaskComponent implements OnInit {
   	this.propertyForm.get('idActividad').setValue("");
   }
 
+  	public pushNotification(){
+
+		var descripcion = 'Ha creado una tarea llamada ' + 
+						this.propertyForm.get('Nombre').value;
+
+		let data = {
+			"descripcion": descripcion,
+			"username": localStorage.getItem('username'),
+			"avatar" : localStorage.getItem('avatar'),
+			"endpoint" : this.getCookie('endpoint'),
+			"p256dh" : this.getCookie('p256dh'),
+			"auth" : this.getCookie('auth')
+		};
+
+		console.log(data);
+
+		this.service3.postUrl('tokens/pushNotification', data)
+		.then(response => {
+			console.log("Notificacion enviada")
+		})
+		.catch(data =>{
+			console.log(data.error)
+		});
+	}
+
+	public getCookie(cname) {
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);
+		let ca = decodedCookie.split(';');
+		for(let i = 0; i <ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+
 	setTarea(){
 
 		let time = this.getDateToday();
@@ -225,6 +266,8 @@ export class TaskComponent implements OnInit {
 			if(response._id !== undefined){
 				this.modalReference.close();
 				this.getTarea(this.getStatusGlobal);
+
+				this.pushNotification();
 				this.limpiarInputDescription();
 			}
     })
