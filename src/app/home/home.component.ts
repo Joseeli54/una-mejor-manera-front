@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
 				}
 
 	ngOnInit() {
-	    
+	    console.log("Probandeishon 2.0")
 	    var rol = localStorage.getItem('role');
 	    var email = localStorage.getItem('email');
 
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
 					"token" : token
 				}
 				
-				this.service.postUrl('saveToken', data).then(response => {
+				this.service.postUrl('tokens', data).then(response => {
 					this.setCookie('endpoint', token.endpoint, 365);
 					this.setCookie('p256dh', token.keys.p256dh, 365);
 					this.setCookie('auth', token.keys.auth, 365);

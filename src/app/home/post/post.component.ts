@@ -251,7 +251,7 @@ export class PostComponent implements OnInit {
 
 		console.log(data);
 
-		this.service2.postUrl('sendToken', data)
+		this.service2.postUrl('tokens/pushNotification', data)
 		.then(response => {
 			console.log("Notificacion enviada")
 		})
