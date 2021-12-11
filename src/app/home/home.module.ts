@@ -13,6 +13,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { GraphicsComponent } from './graphics/graphics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [HomeComponent, PostComponent, ActivityComponent, TaskComponent, ProfileComponent, GraphicsComponent],
@@ -24,7 +27,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     HttpClientModule,
     NgbModule,
     NgSelectModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class HomeModule { }

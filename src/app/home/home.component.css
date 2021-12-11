@@ -2,6 +2,24 @@
 	padding: 15px;
 }
 
+.logo-size{
+	width: 60px;
+	height: 50px;
+}
+
+.size-search{
+	width: 2em;
+	height: 2em;
+}
+
+.logo-branding{
+	background-color: rgb(142 143 173 / 15%)!important;
+	text-align: center;
+	padding-top: .5em;
+	border-radius: 50%;
+	color: rgba(255,255,255,.75);
+}
+
 .border-nav{
 	background-color: #569af7;
 }
@@ -28,6 +46,31 @@
 
 .margin-content{
 	margin-top: 100px
+}
+
+.example-option-img {
+	vertical-align: middle;
+	margin-right: 8px;
+	border-radius: 50%;
+}
+  
+[dir='rtl'] .example-option-img {
+	margin-right: 0;
+	margin-left: 8px;
+}
+
+/* default and hover color */
+::ng-deep .mat-form-field .mat-form-field-flex {
+    background-color: rgb(142 143 173 / 15%);
+}
+
+/* focused color */
+::ng-deep .mat-form-field-underline .mat-form-field-ripple {
+    color: rgb(142 143 173 / 15%);
+}
+
+.form-search{
+	display: none;
 }
 
 @media (max-width: 450px){
